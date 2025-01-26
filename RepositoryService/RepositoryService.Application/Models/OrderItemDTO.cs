@@ -10,6 +10,5 @@ namespace RepositoryService.Application.Models
         public decimal UnitPrice { get; init; }
         public int Quantity { get; init; }
         public decimal TotalPrice => UnitPrice * Quantity;
-
     }
 }

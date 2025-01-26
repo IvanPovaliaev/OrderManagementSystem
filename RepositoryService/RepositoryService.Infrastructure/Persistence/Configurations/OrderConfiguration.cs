@@ -6,8 +6,15 @@ using System;
 
 namespace RepositoryService.Infrastructure.Persistence.Configurations
 {
+    /// <summary>
+    /// Configuration for the <see cref="Order"/> entity.
+    /// </summary>
     internal class OrderConfiguration : IEntityTypeConfiguration<Order>
     {
+        /// <summary>
+        /// Configures the <see cref="Order"/> entity in the database context.
+        /// </summary>
+        /// <param name="builder">The object used for configuring the entity.</param>
         public void Configure(EntityTypeBuilder<Order> builder)
         {
             builder.Property(p => p.TotalPrice)

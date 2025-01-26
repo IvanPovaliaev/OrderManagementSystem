@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 namespace RepositoryService.Application.Interfaces
 {
     /// <summary>
-    /// Defines a service for managing orders and retrieving order data.
+    /// Defines a service contract for managing orders and retrieving order data.
     /// </summary>
     public interface IOrdersService
     {

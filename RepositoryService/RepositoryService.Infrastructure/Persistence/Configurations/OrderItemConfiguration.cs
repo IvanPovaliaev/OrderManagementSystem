@@ -5,8 +5,15 @@ using System;
 
 namespace RepositoryService.Infrastructure.Persistence.Configurations
 {
+    /// <summary>
+    /// Configuration for the <see cref="OrderItem"/> entity.
+    /// </summary>
     internal class OrderItemConfiguration : IEntityTypeConfiguration<OrderItem>
     {
+        /// <summary>
+        /// Configures the <see cref="OrderItem"/> entity in the database context.
+        /// </summary>
+        /// <param name="builder">The object used for configuring the entity.</param>
         public void Configure(EntityTypeBuilder<OrderItem> builder)
         {
             builder.Property(p => p.UnitPrice)

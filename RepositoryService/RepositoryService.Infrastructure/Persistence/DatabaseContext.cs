@@ -14,6 +14,7 @@ namespace RepositoryService.Infrastructure.Persistence
         {
             Database.Migrate();
         }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

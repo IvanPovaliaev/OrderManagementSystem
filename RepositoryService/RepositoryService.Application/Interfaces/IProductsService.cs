@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 namespace RepositoryService.Application.Interfaces
 {
     /// <summary>
-    /// Defines a service for managing products and retrieving product data.
+    /// Defines a service contract for managing products and retrieving product data.
     /// </summary>
     public interface IProductsService
     {

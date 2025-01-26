@@ -6,8 +6,15 @@ using System;
 
 namespace RepositoryService.Infrastructure.Persistence.Configurations
 {
+    /// <summary>
+    /// Configuration for the <see cref="Product"/> entity.
+    /// </summary>
     internal class ProductConfiguration : IEntityTypeConfiguration<Product>
     {
+        /// <summary>
+        /// Configures the <see cref="Product"/> entity in the database context.
+        /// </summary>
+        /// <param name="builder">The object used for configuring the entity.</param>
         public void Configure(EntityTypeBuilder<Product> builder)
         {
             builder.Property(p => p.Price)

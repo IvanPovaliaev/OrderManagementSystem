@@ -46,7 +46,7 @@ namespace RepositoryService.API
                 {
                     Version = "v1",
                     Title = "RepositoryService.API",
-                    Description = "RepositoryService.API"
+                    Description = "Сервис, который хранит информацию о товарах и заказах. Предоставляет REST API для получения информации о товарах, заказах, деталях заказа"
                 });
             });
 
