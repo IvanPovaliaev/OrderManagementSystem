@@ -2,10 +2,13 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.OpenApi.Models;
 using RepositoryService.Application;
 using RepositoryService.Application.Mappers;
 using RepositoryService.Infrastructure;
 using RepositoryService.Infrastructure.Persistence;
+using System;
+using System.IO;
 
 namespace RepositoryService.API
 {
@@ -27,7 +30,21 @@ namespace RepositoryService.API
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen();
+            builder.Services.AddSwaggerGen(options =>
+            {
+                var basePath = AppContext.BaseDirectory;
+
+                var xmlPath = Path.Combine(basePath, "RepositoryService.API.xml");
+
+                options.IncludeXmlComments(xmlPath, includeControllerXmlComments: true);
+
+                options.SwaggerDoc("v1", new OpenApiInfo
+                {
+                    Version = "v1",
+                    Title = "RepositoryService.API",
+                    Description = "RepositoryService.API"
+                });
+            });
 
             var app = builder.Build();
 

@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>RepositoryService.API</name>
+    </assembly>
+    <members>
+        <member name="T:RepositoryService.API.Controllers.ProductController">
+            <summary>
+            Controller for managing products
+            </summary>
+        </member>
+        <member name="M:RepositoryService.API.Controllers.ProductController.GetAll">
+            <summary>
+            Retrieves all products from the service.
+            </summary>
+            <returns>A collection of <see cref="T:RepositoryService.Application.Models.ProductDTO"/> instances</returns>
+            <response code="200">Returns the collection of products</response>
+        </member>
+        <member name="M:RepositoryService.API.Controllers.ProductController.Get(System.Guid)">
+            <summary>
+            Retrieves a product by its unique identifier.
+            </summary>
+            <param name="id">The unique identifier of the product.</param>
+            <returns>The <see cref="T:RepositoryService.Application.Models.ProductDTO"/> instance if found, or <c>404 Not Found</c> if not found.</returns>
+            <response code="200">Returns the requested product</response>
+            <response code="404">If the product with the specified ID is not found</response>
+        </member>
+    </members>
+</doc>
