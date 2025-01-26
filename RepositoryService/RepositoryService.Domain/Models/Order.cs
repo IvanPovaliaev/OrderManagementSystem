@@ -12,7 +12,7 @@ namespace RepositoryService.Domain.Models
         public string ClientFullName { get; set; }
         public string ClientPhone { get; set; }
         public List<OrderItem> Items { get; set; }
-        public int TotalItems => Items.Count;
-        public decimal Cost { get; set; }
+        public int TotalItems { get; set; }
+        public decimal TotalPrice { get; set; }
     }
 }

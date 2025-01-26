@@ -23,7 +23,7 @@ namespace RepositoryService.Infrastructure.Persistence.Builders
         /// <summary>
         /// Sets the product's name.
         /// </summary>
-        /// <param name="article">The article of the product.</param>
+        /// <param name="name">The name of the product.</param>
         /// <returns>The current <see cref="ProductBuilder"/> instance</returns>
         public ProductBuilder WithName(string name)
         {
@@ -58,7 +58,7 @@ namespace RepositoryService.Infrastructure.Persistence.Builders
         /// </summary>
         /// <param name="price">The price of the product.</param>
         /// <returns>The current <see cref="ProductBuilder"/> instance.</returns>
-        public ProductBuilder WithPrice(float price)
+        public ProductBuilder WithPrice(decimal price)
         {
             _product.Price = price;
             return this;

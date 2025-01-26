@@ -36,9 +36,6 @@ namespace RepositoryService.Infrastructure.Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<decimal>("Cost")
-                        .HasColumnType("numeric");
-
                     b.Property<DateTime>("CreationDate")
                         .HasColumnType("timestamp with time zone");
 
@@ -48,9 +45,40 @@ namespace RepositoryService.Infrastructure.Persistence.Migrations
                     b.Property<DateTime>("StoreUntil")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<int>("TotalItems")
+                        .HasColumnType("integer");
+
+                    b.Property<decimal>("TotalPrice")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("numeric(18,2)");
+
                     b.HasKey("Id");
 
                     b.ToTable("Orders");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("af4ed62e-f786-487e-9149-73810453a833"),
+                            ClientFullName = "Иванов Иван Иванович",
+                            ClientPhone = "+7900-000-00-00",
+                            CreationDate = new DateTime(2025, 1, 26, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Status = 0,
+                            StoreUntil = new DateTime(2025, 2, 26, 0, 0, 0, 0, DateTimeKind.Utc),
+                            TotalItems = 2,
+                            TotalPrice = 22040m
+                        },
+                        new
+                        {
+                            Id = new Guid("ee2ca227-74c9-4131-acc0-c25171562598"),
+                            ClientFullName = "Петров Пётр Петрович",
+                            ClientPhone = "+7911-111-11-11",
+                            CreationDate = new DateTime(2025, 1, 20, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Status = 0,
+                            StoreUntil = new DateTime(2025, 2, 20, 0, 0, 0, 0, DateTimeKind.Utc),
+                            TotalItems = 1,
+                            TotalPrice = 7970m
+                        });
                 });
 
             modelBuilder.Entity("RepositoryService.Domain.Models.OrderItem", b =>
@@ -69,7 +97,8 @@ namespace RepositoryService.Infrastructure.Persistence.Migrations
                         .HasColumnType("integer");
 
                     b.Property<decimal>("UnitPrice")
-                        .HasColumnType("numeric");
+                        .HasPrecision(18, 2)
+                        .HasColumnType("numeric(18,2)");
 
                     b.HasKey("Id");
 
@@ -77,7 +106,25 @@ namespace RepositoryService.Infrastructure.Persistence.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("OrderItem");
+                    b.ToTable("OrderItems");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("8a9215b6-705c-451f-a2c4-bdd643d74a7a"),
+                            OrderId = new Guid("af4ed62e-f786-487e-9149-73810453a833"),
+                            ProductId = new Guid("4cc140dc-410b-4a1f-8e57-8c11c8debe8d"),
+                            Quantity = 2,
+                            UnitPrice = 11020m
+                        },
+                        new
+                        {
+                            Id = new Guid("d6dac720-bd3b-460c-8757-2cd9398882ed"),
+                            OrderId = new Guid("ee2ca227-74c9-4131-acc0-c25171562598"),
+                            ProductId = new Guid("11ea3f23-f3d7-4834-ab3d-247f41517da2"),
+                            Quantity = 1,
+                            UnitPrice = 7970m
+                        });
                 });
 
             modelBuilder.Entity("RepositoryService.Domain.Models.Product", b =>
@@ -97,8 +144,9 @@ namespace RepositoryService.Infrastructure.Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<float>("Price")
-                        .HasColumnType("real");
+                    b.Property<decimal>("Price")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("numeric(18,2)");
 
                     b.Property<int>("QuantityInStock")
                         .HasColumnType("integer");
@@ -114,7 +162,7 @@ namespace RepositoryService.Infrastructure.Persistence.Migrations
                             Article = "SLEG-900-1TCS",
                             Description = "Накопитель SSD 1Tb ADATA Legend 900 (SLEG-900-1TCS) - это высококачественное хранилище данных для вашего компьютера",
                             Name = "SSD 1Tb ADATA Legend 900 (SLEG-900-1TCS)",
-                            Price = 7970f,
+                            Price = 7970m,
                             QuantityInStock = 20
                         },
                         new
@@ -122,7 +170,7 @@ namespace RepositoryService.Infrastructure.Persistence.Migrations
                             Id = new Guid("4cc140dc-410b-4a1f-8e57-8c11c8debe8d"),
                             Article = "WD43PURZ",
                             Name = "4Tb SATA-III WD Purple (WD43PURZ)",
-                            Price = 11020f,
+                            Price = 11020m,
                             QuantityInStock = 2
                         });
                 });

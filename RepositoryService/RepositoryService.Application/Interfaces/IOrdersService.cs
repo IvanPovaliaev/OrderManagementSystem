@@ -20,8 +20,8 @@ namespace RepositoryService.Application.Interfaces
         /// Retrieves a order from the repository by its unique identifier
         /// </summary>
         /// <returns>
-        /// A <see cref="OrderDTO"/> representing the order with the specified ID; null if not found.
+        /// A <see cref="OrderDetailsDTO"/> representing the order with the specified ID with all details information; null if not found.
         /// </returns>
-        Task<OrderDTO?> GetAsync(Guid id);
+        Task<OrderDetailsDTO?> GetAsync(Guid id);
     }
 }

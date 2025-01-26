@@ -25,10 +25,10 @@ namespace RepositoryService.Application.Services
             return dbOrders.Select(_mapper.Map<OrderDTO>).ToArray();
         }
 
-        public async Task<OrderDTO?> GetAsync(Guid id)
+        public async Task<OrderDetailsDTO?> GetAsync(Guid id)
         {
             var dbOrder = await _ordersRepository.GetAsync(id);
-            return _mapper.Map<OrderDTO>(dbOrder);
+            return _mapper.Map<OrderDetailsDTO>(dbOrder);
         }
     }
 }

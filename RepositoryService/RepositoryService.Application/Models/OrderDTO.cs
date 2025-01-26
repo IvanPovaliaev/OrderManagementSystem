@@ -1,6 +1,5 @@
 ﻿using RepositoryService.Domain.Models;
 using System;
-using System.Collections.Generic;
 
 namespace RepositoryService.Application.Models
 {
@@ -12,8 +11,7 @@ namespace RepositoryService.Application.Models
         public OrderStatus Status { get; init; }
         public string ClientFullName { get; init; }
         public string ClientPhone { get; init; }
-        public List<OrderItemDTO> Items { get; init; }
-        public int TotalItems => Items.Count;
-        public decimal Cost { get; init; }
+        public int TotalItems { get; init; }
+        public decimal TotalPrice { get; init; }
     }
 }

@@ -9,6 +9,7 @@ using RepositoryService.Infrastructure;
 using RepositoryService.Infrastructure.Persistence;
 using System;
 using System.IO;
+using System.Text.Json.Serialization;
 
 namespace RepositoryService.API
 {
@@ -26,9 +27,12 @@ namespace RepositoryService.API
             builder.Services.AddApplication();
             builder.Services.AddInfrastructure();
 
-            // Add services to the container.
-            builder.Services.AddControllers();
-            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+            builder.Services.AddControllers()
+                            .AddJsonOptions(options =>
+                            {
+                                options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+                            }); ;
+
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen(options =>
             {
