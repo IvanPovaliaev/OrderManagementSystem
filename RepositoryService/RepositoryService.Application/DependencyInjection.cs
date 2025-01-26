@@ -14,6 +14,7 @@ namespace RepositoryService.Application
         public static IServiceCollection AddApplication(this IServiceCollection services)
         {
             services.AddTransient<IProductsService, ProductsService>();
+            services.AddTransient<IOrdersService, OrdersService>();
             return services;
         }
     }
