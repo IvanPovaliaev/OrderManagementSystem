@@ -7,6 +7,7 @@ using RepositoryService.Application;
 using RepositoryService.Application.Mappers;
 using RepositoryService.Infrastructure;
 using RepositoryService.Infrastructure.Persistence;
+using Serilog;
 using System;
 using System.IO;
 using System.Text.Json.Serialization;
@@ -18,6 +19,11 @@ namespace RepositoryService.API
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+
+            builder.Host.UseSerilog((context, configuration) => configuration
+                        .ReadFrom.Configuration(context.Configuration)
+                        .Enrich.FromLogContext()
+                        .Enrich.WithProperty("ApplicationName", "RepositoryService.API"));
 
             var connection = builder.Configuration.GetConnectionString("RepositoryServiceDatabase");
             builder.Services.AddDbContext<DatabaseContext>(options => options.UseNpgsql(connection), ServiceLifetime.Scoped);
@@ -51,6 +57,8 @@ namespace RepositoryService.API
             });
 
             var app = builder.Build();
+
+            app.UseSerilogRequestLogging();
 
             app.UseSwagger();
             app.UseSwaggerUI();
