@@ -7,11 +7,16 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\RepositoryService.Application\RepositoryService.Application.csproj" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="9.0.1">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.0.3" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Persistance\" />
+    <ProjectReference Include="..\RepositoryService.Application\RepositoryService.Application.csproj" />
   </ItemGroup>
 
 </Project>
