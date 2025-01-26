@@ -5,7 +5,7 @@ namespace RepositoryService.Domain.Models
     public class Product
     {
         public Guid Id { get; init; }
-        public int Article { get; set; }
+        public string Article { get; set; }
         public required string Name { get; set; }
         public string? Description { get; set; }
         public float Price { get; set; }
