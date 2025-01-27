@@ -37,7 +37,6 @@ namespace OrderManagementService.Infrastructure.RabbitMQ
 
             var exchangeName = await DeclareExchangeAsync();
 
-            //BasicProperties is null?
             await _channel.BasicPublishAsync(exchange: exchangeName, routingKey: routingKey, messageBody);
         }
 
