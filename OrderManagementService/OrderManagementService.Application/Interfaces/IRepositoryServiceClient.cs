@@ -2,7 +2,7 @@
 using System;
 using System.Threading.Tasks;
 
-namespace OrderManagementService.Infrastructure.RepositoryService
+namespace OrderManagementService.Application.Interfaces
 {
     public interface IRepositoryServiceClient
     {

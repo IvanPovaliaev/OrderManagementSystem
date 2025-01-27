@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using OrderManagementService.Application.Interfaces;
 using OrderManagementService.Application.Models;
-using OrderManagementService.Infrastructure.RepositoryService;
 using System;
 using System.Threading.Tasks;
 
@@ -10,11 +10,11 @@ namespace OrderManagementService.API.Controllers
     [ApiController]
     public class OrderController : ControllerBase
     {
-        private readonly IRepositoryServiceClient _repositoryServiceClient;
+        private readonly IOrdersService _ordersService;
 
-        public OrderController(IRepositoryServiceClient repositoryServiceClient)
+        public OrderController(IOrdersService ordersService)
         {
-            _repositoryServiceClient = repositoryServiceClient;
+            _ordersService = ordersService;
         }
 
         [HttpPost("create")]
@@ -32,14 +32,27 @@ namespace OrderManagementService.API.Controllers
         [HttpPost("changeStatus")]
         public async Task<IActionResult> ChangeStatus([FromBody] ChangeOrderStatusDTO order)
         {
-            return BadRequest();
+            var isOrderExist = await _ordersService.IsExistAsync(order.Id);
+
+            if (!isOrderExist)
+            {
+                return NotFound();
+            }
+
+            return await _ordersService.ChangeStatusAsync(order) ? Ok(order) : BadRequest();
         }
 
         [HttpPost("cancel")]
         public async Task<IActionResult> Cancel(Guid id)
         {
-            var order = await _repositoryServiceClient.GetOrderByIdAsync(id);
-            return BadRequest(order);
+            var isOrderExist = await _ordersService.IsExistAsync(id);
+
+            if (!isOrderExist)
+            {
+                return NotFound();
+            }
+
+            return await _ordersService.CancelAsync(id) ? Ok(id) : BadRequest();
         }
     }
 }

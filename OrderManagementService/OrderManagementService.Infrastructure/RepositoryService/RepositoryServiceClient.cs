@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using OrderManagementService.Application.Interfaces;
 using OrderManagementService.Infrastructure.RepositoryService.Models;
 using System;
 using System.Net.Http;

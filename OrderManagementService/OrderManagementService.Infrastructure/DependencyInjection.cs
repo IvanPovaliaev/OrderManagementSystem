@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using OrderManagementService.Application.Interfaces;
 using OrderManagementService.Infrastructure.RepositoryService;
 using System;
 using System.Net.Http.Headers;
