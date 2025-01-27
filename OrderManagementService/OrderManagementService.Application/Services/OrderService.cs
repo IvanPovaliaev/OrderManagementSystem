@@ -31,7 +31,7 @@ namespace OrderManagementService.Application.Services
             }
 
             var routingKey = "order.change.status";
-            var message = _mapper.Map<ChangeOrderStatusMessage>(order);
+            var message = _mapper.Map<OrderStatusChangedMessage>(order);
             await _messageBrokerPublisher.PublishAsync(routingKey, message);
 
             return true;

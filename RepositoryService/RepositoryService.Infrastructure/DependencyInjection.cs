@@ -28,8 +28,10 @@ namespace RepositoryService.Infrastructure
             services.AddScoped<IOrdersRepository, OrdersRepository>();
 
             services.AddTransient<IMessageBrokerOrderCanceledConsumer, RabbitMQOrderCanceledConsumer>();
-
             services.AddHostedService<MessageBrokerOrderCanceledHostedService>();
+
+            services.AddTransient<IMessageBrokerOrderStatusChangedConsumer, RabbitMQOrderStatusChangedConsumer>();
+            services.AddHostedService<MessageBrokerOrderStatusChangedHostedService>();
 
             return services;
         }

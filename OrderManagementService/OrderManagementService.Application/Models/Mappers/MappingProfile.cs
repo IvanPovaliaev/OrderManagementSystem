@@ -7,7 +7,7 @@ namespace OrderManagementService.Application.Models.Mappers
     {
         public MappingProfile()
         {
-            CreateMap<ChangeOrderStatusDTO, ChangeOrderStatusMessage>();
+            CreateMap<ChangeOrderStatusDTO, OrderStatusChangedMessage>();
         }
     }
 }

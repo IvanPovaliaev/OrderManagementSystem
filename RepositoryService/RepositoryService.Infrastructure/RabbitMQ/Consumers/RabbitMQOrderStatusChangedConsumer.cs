@@ -1,0 +1,75 @@
+﻿using Microsoft.Extensions.Options;
+using Newtonsoft.Json;
+using RabbitMQ.Client;
+using RabbitMQ.Client.Events;
+using RepositoryService.Application.Interfaces.MessageBrokerConsumers;
+using RepositoryService.Infrastructure.RabbitMQ.Messages;
+using System;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace RepositoryService.Infrastructure.RabbitMQ.Consumers
+{
+    internal class RabbitMQOrderStatusChangedConsumer : IMessageBrokerOrderStatusChangedConsumer, IDisposable
+    {
+        private readonly IOptionsMonitor<RabbitMQOptions> _rabbitMQOptionsMonitor;
+        private readonly IConnection _connection;
+        private readonly IChannel _channel;
+
+        public RabbitMQOrderStatusChangedConsumer(IOptionsMonitor<RabbitMQOptions> rabbitMQOptionsMonitor)
+        {
+            _rabbitMQOptionsMonitor = rabbitMQOptionsMonitor;
+            var options = _rabbitMQOptionsMonitor.CurrentValue;
+            var factory = new ConnectionFactory()
+            {
+                HostName = options.HostName,
+                UserName = options.UserName,
+                Password = options.Password,
+                Port = options.Port
+            };
+
+            _connection = factory.CreateConnectionAsync().GetAwaiter().GetResult();
+            _channel = _connection.CreateChannelAsync().GetAwaiter().GetResult();
+        }
+
+        public async Task ConsumeAsync()
+        {
+            var routingKey = "order.status.changed";
+            var queueName = "repository.orders.status.changed.queue";
+            var exchangeName = await DeclareExchangeAsync();
+
+            await _channel.QueueDeclareAsync(queue: queueName, durable: true, exclusive: false, autoDelete: false, arguments: null);
+            await _channel.QueueBindAsync(queue: queueName, exchange: exchangeName, routingKey: routingKey);
+
+            var consumer = new AsyncEventingBasicConsumer(_channel);
+
+            consumer.ReceivedAsync += (sender, args) =>
+            {
+                var body = args.Body.ToArray();
+                var message = Encoding.UTF8.GetString(body);
+
+                if (message is not null)
+                {
+                    var orderId = JsonConvert.DeserializeObject<OrderStatusChangedMessage>(message);
+                }
+
+                return Task.CompletedTask;
+            };
+
+            await _channel.BasicConsumeAsync(queue: queueName, autoAck: true, consumer: consumer);
+        }
+
+        public void Dispose()
+        {
+            _channel.Dispose();
+            _connection.Dispose();
+        }
+
+        private async Task<string> DeclareExchangeAsync()
+        {
+            var name = _rabbitMQOptionsMonitor.CurrentValue.ExchangeName;
+            await _channel.ExchangeDeclareAsync(exchange: name, type: ExchangeType.Direct, durable: true);
+            return name;
+        }
+    }
+}
