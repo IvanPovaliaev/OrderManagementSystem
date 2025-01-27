@@ -5,5 +5,6 @@ namespace RepositoryService.Application.Interfaces.MessageBrokerConsumers
     public interface IMessageBrokerOrderCanceledConsumer
     {
         Task ConsumeAsync();
+        void Dispose();
     }
 }

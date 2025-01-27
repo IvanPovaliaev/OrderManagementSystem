@@ -1,8 +1,11 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using RepositoryService.Application.Interfaces.MessageBrokerConsumers;
 using RepositoryService.Domain.Interfaces;
+using RepositoryService.Infrastructure.Host.Services;
 using RepositoryService.Infrastructure.Persistence.Repositories;
 using RepositoryService.Infrastructure.RabbitMQ;
+using RepositoryService.Infrastructure.RabbitMQ.Consumers;
 
 namespace RepositoryService.Infrastructure
 {
@@ -23,6 +26,11 @@ namespace RepositoryService.Infrastructure
 
             services.AddScoped<IProductsRepository, ProductsRepository>();
             services.AddScoped<IOrdersRepository, OrdersRepository>();
+
+            services.AddTransient<IMessageBrokerOrderCanceledConsumer, RabbitMQOrderCanceledConsumer>();
+
+            services.AddHostedService<MessageBrokerOrderCanceledHostedService>();
+
             return services;
         }
     }
