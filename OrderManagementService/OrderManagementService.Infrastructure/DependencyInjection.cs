@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using OrderManagementService.Application.Interfaces;
+using OrderManagementService.Infrastructure.RabbitMQ;
 using OrderManagementService.Infrastructure.RepositoryService;
 using System;
 using System.Net.Http.Headers;
@@ -26,6 +27,13 @@ namespace OrderManagementService.Infrastructure
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
                 client.Timeout = TimeSpan.FromMilliseconds(options.Timeout);
             });
+
+            var rabbitMQConfiguration = configuration.GetSection("RabbitMQ");
+
+            services.AddOptions<RabbitMQOptions>()
+                    .Bind(rabbitMQConfiguration);
+
+            services.AddTransient<IMessageBrokerPublisher, RabbitMQPublisher>();
 
             return services;
         }
