@@ -1,5 +1,7 @@
-﻿using OrderManagementService.Application.Interfaces;
+﻿using AutoMapper;
+using OrderManagementService.Application.Interfaces;
 using OrderManagementService.Application.Models;
+using OrderManagementService.Application.Models.Messages;
 using OrderManagementService.Infrastructure.RepositoryService.Models;
 using System;
 using System.Threading.Tasks;
@@ -9,9 +11,14 @@ namespace OrderManagementService.Application.Services
     internal class OrderService : IOrdersService
     {
         private readonly IRepositoryServiceClient _repositoryServiceClient;
-        public OrderService(IRepositoryServiceClient repositoryServiceClient)
+        private readonly IMapper _mapper;
+        private readonly IMessageBrokerPublisher _messageBrokerPublisher;
+
+        public OrderService(IRepositoryServiceClient repositoryServiceClient, IMapper mapper, IMessageBrokerPublisher messageBrokerPublisher)
         {
             _repositoryServiceClient = repositoryServiceClient;
+            _mapper = mapper;
+            _messageBrokerPublisher = messageBrokerPublisher;
         }
 
         public async Task<bool> ChangeStatusAsync(ChangeOrderStatusDTO order)
@@ -22,6 +29,10 @@ namespace OrderManagementService.Application.Services
             {
                 return false;
             }
+
+            var routingKey = "order.change.status";
+            var message = _mapper.Map<ChangeOrderStatusMessage>(order);
+            await _messageBrokerPublisher.PublishAsync(routingKey, message);
 
             return true;
         }
@@ -35,14 +46,15 @@ namespace OrderManagementService.Application.Services
                 return false;
             }
 
-            //TO DO: тут отправляется событие в очередь на отмену заказа по id
+            var routingKey = "order.cancel";
+            await _messageBrokerPublisher.PublishAsync(routingKey, id);
 
             return true;
         }
 
         public async Task<bool> IsExistAsync(Guid id)
         {
-            return await _repositoryServiceClient.GetOrderByIdAsync(id) is null;
+            return await _repositoryServiceClient.GetOrderByIdAsync(id) is not null;
         }
 
         private bool IsStatusCanBeChanged(OrderStatus currentStatus, OrderStatus newStatus)

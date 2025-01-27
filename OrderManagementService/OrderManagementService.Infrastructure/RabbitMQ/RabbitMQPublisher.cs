@@ -10,13 +10,14 @@ namespace OrderManagementService.Infrastructure.RabbitMQ
 {
     internal class RabbitMQPublisher : IMessageBrokerPublisher, IDisposable
     {
-        private readonly IOptionsMonitor<RabbitMQOptions> rabbitMQOptionsMonitor;
+        private readonly IOptionsMonitor<RabbitMQOptions> _rabbitMQOptionsMonitor;
         private readonly IConnection _connection;
         private readonly IChannel _channel;
 
         public RabbitMQPublisher(IOptionsMonitor<RabbitMQOptions> rabbitMQOptionsMonitor)
         {
-            var options = rabbitMQOptionsMonitor.CurrentValue;
+            _rabbitMQOptionsMonitor = rabbitMQOptionsMonitor;
+            var options = _rabbitMQOptionsMonitor.CurrentValue;
             var factory = new ConnectionFactory()
             {
                 HostName = options.HostName,
@@ -48,7 +49,7 @@ namespace OrderManagementService.Infrastructure.RabbitMQ
 
         private async Task<string> DeclareExchangeAsync()
         {
-            var name = rabbitMQOptionsMonitor.CurrentValue.ExchangeName;
+            var name = _rabbitMQOptionsMonitor.CurrentValue.ExchangeName;
             await _channel.ExchangeDeclareAsync(exchange: name, type: ExchangeType.Direct, durable: true);
             return name;
         }
