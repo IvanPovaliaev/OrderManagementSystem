@@ -31,7 +31,7 @@ namespace RepositoryService.API
             builder.Services.AddAutoMapper(typeof(ProductToProductDTOProfile).Assembly);
 
             builder.Services.AddApplication();
-            builder.Services.AddInfrastructure();
+            builder.Services.AddInfrastructure(builder.Configuration);
 
             builder.Services.AddControllers()
                             .AddJsonOptions(options =>
