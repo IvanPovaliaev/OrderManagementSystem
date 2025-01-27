@@ -4,6 +4,8 @@
     <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>disable</ImplicitUsings>
+    <GenerateDocumentationFile>True</GenerateDocumentationFile>
+    <DocumentationFile>.\OrderManagementService.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
@@ -16,7 +18,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\" />
+    <ProjectReference Include="..\OrderManagementService.Application\OrderManagementService.Application.csproj" />
+    <ProjectReference Include="..\OrderManagementService.Infrastructure\OrderManagementService.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
+using OrderManagementService.Application;
+using OrderManagementService.Infrastructure;
 using Serilog;
 using System;
 using System.IO;
@@ -19,6 +21,9 @@ namespace OrderManagementService.API
                         .Enrich.WithProperty("ApplicationName", "OrderManagementService"));
 
             builder.Services.AddControllers();
+
+            builder.Services.AddApplication();
+            builder.Services.AddInfrastructure(builder.Configuration);
 
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen(options =>
