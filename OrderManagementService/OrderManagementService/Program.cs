@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
+using Serilog;
 using System;
 using System.IO;
 
@@ -11,6 +12,11 @@ namespace OrderManagementService.API
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+
+            builder.Host.UseSerilog((context, configuration) => configuration
+                        .ReadFrom.Configuration(context.Configuration)
+                        .Enrich.FromLogContext()
+                        .Enrich.WithProperty("ApplicationName", "OrderManagementService"));
 
             builder.Services.AddControllers();
 
@@ -32,6 +38,8 @@ namespace OrderManagementService.API
             });
 
             var app = builder.Build();
+
+            app.UseSerilogRequestLogging();
 
             app.UseSwagger();
             app.UseSwaggerUI();
