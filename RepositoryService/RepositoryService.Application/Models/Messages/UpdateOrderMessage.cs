@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace RepositoryService.Application.Models.Messages
 {
-    internal record class UpdateOrderMessage
+    public record class UpdateOrderMessage
     {
         public Guid Id { get; init; }
         public List<OrderItemDTO> Items { get; init; }

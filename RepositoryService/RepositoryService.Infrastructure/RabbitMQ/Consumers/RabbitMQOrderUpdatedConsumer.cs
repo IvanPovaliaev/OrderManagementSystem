@@ -3,7 +3,6 @@ using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
-using RepositoryService.Application.Interfaces;
 using RepositoryService.Application.Interfaces.MessageBrokerConsumers;
 using RepositoryService.Infrastructure.RabbitMQ.Messages;
 using System;
@@ -57,8 +56,8 @@ namespace RepositoryService.Infrastructure.RabbitMQ.Consumers
                     var orderMessage = JsonConvert.DeserializeObject<OrderStatusChangedMessage>(message);
                     using (var scope = _serviceProvider.CreateScope())
                     {
-                        var orderService = scope.ServiceProvider.GetRequiredService<IOrdersService>();
-                        await orderService.UpdateAsync(orderMessage!.Id, orderMessage.NewStatus);
+                        //var orderService = scope.ServiceProvider.GetRequiredService<IOrdersService>();
+                        //await orderService.UpdateAsync(orderMessage!.Id, orderMessage.NewStatus);
                     }
                 }
 
