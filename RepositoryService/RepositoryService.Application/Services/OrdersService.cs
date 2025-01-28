@@ -1,14 +1,11 @@
 ﻿using AutoMapper;
 using MediatR;
 using RepositoryService.Application.Interfaces;
-using RepositoryService.Application.Models;
 using RepositoryService.Application.Models.Messages;
 using RepositoryService.Application.Products.Commands.ChangeQuantity;
 using RepositoryService.Domain.Interfaces;
 using RepositoryService.Domain.Models;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace RepositoryService.Application.Services
@@ -41,18 +38,6 @@ namespace RepositoryService.Application.Services
             }
 
             await _ordersRepository.AddAsync(newOrder);
-        }
-
-        public async Task<ICollection<OrderDTO>> GetAllAsync()
-        {
-            var dbOrders = await _ordersRepository.GetAllAsync();
-            return dbOrders.Select(_mapper.Map<OrderDTO>).ToArray();
-        }
-
-        public async Task<OrderDetailsDTO?> GetAsync(Guid id)
-        {
-            var dbOrder = await _ordersRepository.GetAsync(id);
-            return _mapper.Map<OrderDetailsDTO>(dbOrder);
         }
 
         public async Task UpdateAsync(UpdateOrderMessage order)

@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using RepositoryService.Application.Interfaces;
+﻿using MediatR;
+using Microsoft.AspNetCore.Mvc;
 using RepositoryService.Application.Models;
+using RepositoryService.Application.Orders.Queries.GetAllOrders;
+using RepositoryService.Application.Orders.Queries.GetOrderById;
 using System;
 using System.Threading.Tasks;
 
@@ -13,11 +15,11 @@ namespace RepositoryService.API.Controllers
     [ApiController]
     public class OrderController : ControllerBase
     {
-        private readonly IOrdersService _ordersService;
+        private readonly ISender _sender;
 
-        public OrderController(IOrdersService ordersService)
+        public OrderController(ISender sender)
         {
-            _ordersService = ordersService;
+            _sender = sender;
         }
 
         /// <summary>
@@ -28,7 +30,7 @@ namespace RepositoryService.API.Controllers
         [HttpGet("all")]
         public async Task<IActionResult> GetAll()
         {
-            var orders = await _ordersService.GetAllAsync();
+            var orders = await _sender.Send(new GetAllOrdersQuery());
 
             return Ok(orders);
         }
@@ -43,7 +45,8 @@ namespace RepositoryService.API.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(Guid id)
         {
-            var order = await _ordersService.GetAsync(id);
+            var query = new GetOrderByIdQuery() { Id = id };
+            var order = await _sender.Send(query);
 
             return order is null ? NotFound() : Ok(order);
         }
