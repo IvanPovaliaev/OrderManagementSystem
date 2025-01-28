@@ -2,7 +2,6 @@
 using Newtonsoft.Json;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
-using RepositoryService.Application.Interfaces;
 using RepositoryService.Application.Interfaces.MessageBrokerConsumers;
 using System;
 using System.Text;
@@ -10,16 +9,14 @@ using System.Threading.Tasks;
 
 namespace RepositoryService.Infrastructure.RabbitMQ.Consumers
 {
-    internal class RabbitMQOrderCanceledConsumer : IMessageBrokerOrderCancelledConsumer, IDisposable
+    internal class RabbitMQOrderCreatedConsumer : IMessageBrokerOrderCreatedConsumer, IDisposable
     {
         private readonly IOptionsMonitor<RabbitMQOptions> _rabbitMQOptionsMonitor;
         private readonly IConnection _connection;
         private readonly IChannel _channel;
-        private readonly IOrdersService _ordersService;
 
-        public RabbitMQOrderCanceledConsumer(IOptionsMonitor<RabbitMQOptions> rabbitMQOptionsMonitor, IOrdersService ordersService)
+        public RabbitMQOrderCreatedConsumer(IOptionsMonitor<RabbitMQOptions> rabbitMQOptionsMonitor)
         {
-            _ordersService = ordersService;
             _rabbitMQOptionsMonitor = rabbitMQOptionsMonitor;
             var options = _rabbitMQOptionsMonitor.CurrentValue;
             var factory = new ConnectionFactory()
@@ -36,8 +33,8 @@ namespace RepositoryService.Infrastructure.RabbitMQ.Consumers
 
         public async Task ConsumeAsync()
         {
-            var routingKey = "order.cancel";
-            var queueName = "repository.orders.cancel.queue";
+            var routingKey = "order.create";
+            var queueName = "repository.orders.create.queue";
             var exchangeName = await DeclareExchangeAsync();
 
             await _channel.QueueDeclareAsync(queue: queueName, durable: true, exclusive: false, autoDelete: false, arguments: null);
@@ -45,7 +42,7 @@ namespace RepositoryService.Infrastructure.RabbitMQ.Consumers
 
             var consumer = new AsyncEventingBasicConsumer(_channel);
 
-            consumer.ReceivedAsync += async (sender, args) =>
+            consumer.ReceivedAsync += (sender, args) =>
             {
                 var body = args.Body.ToArray();
                 var message = Encoding.UTF8.GetString(body);
@@ -53,9 +50,9 @@ namespace RepositoryService.Infrastructure.RabbitMQ.Consumers
                 if (message is not null)
                 {
                     var orderId = JsonConvert.DeserializeObject<Guid>(message);
-                    //await _ordersService.CancelAsync(orderId);
-                    await Task.Run(() => Task.Delay(1000));
                 }
+
+                return Task.CompletedTask;
             };
 
             await _channel.BasicConsumeAsync(queue: queueName, autoAck: true, consumer: consumer);

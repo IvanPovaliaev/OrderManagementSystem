@@ -63,12 +63,12 @@ namespace OrderManagementService.Application.Services
 
         private bool IsStatusCanBeChanged(OrderStatus currentStatus, OrderStatus newStatus)
         {
-            return currentStatus != newStatus && newStatus != OrderStatus.Canceled;
+            return currentStatus != newStatus && newStatus != OrderStatus.Cancelled;
         }
 
         private bool IsCanBeCanceled(OrderDTO order)
         {
-            return order.Status != OrderStatus.Canceled;
+            return order.Status != OrderStatus.Cancelled;
         }
     }
 }

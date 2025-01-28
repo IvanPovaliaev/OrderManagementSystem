@@ -4,5 +4,10 @@
         <name>OrderManagementService.API</name>
     </assembly>
     <members>
+        <member name="T:OrderManagementService.API.Controllers.OrderController">
+            <summary>
+            Controller for managing orders
+            </summary>
+        </member>
     </members>
 </doc>

@@ -22,5 +22,7 @@ namespace RepositoryService.Domain.Interfaces
         /// <param name="id">The unique identifier of the order.</param>
         /// <returns>The order with the specified ID; null if not found.</returns>
         Task<Order?> GetAsync(Guid id);
+
+        Task UpdateAsync(Order order);
     }
 }

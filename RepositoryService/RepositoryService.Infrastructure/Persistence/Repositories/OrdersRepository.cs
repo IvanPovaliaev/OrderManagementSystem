@@ -29,5 +29,11 @@ namespace RepositoryService.Infrastructure.Persistence.Repositories
                                                 .ThenInclude(o => o.Product)
                                                 .FirstOrDefaultAsync(o => o.Id == id);
         }
+
+        public async Task UpdateAsync(Order order)
+        {
+            _databaseContext.Orders.Update(order);
+            await _databaseContext.SaveChangesAsync();
+        }
     }
 }

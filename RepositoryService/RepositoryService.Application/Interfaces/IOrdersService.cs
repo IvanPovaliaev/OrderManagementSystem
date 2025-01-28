@@ -23,5 +23,7 @@ namespace RepositoryService.Application.Interfaces
         /// A <see cref="OrderDetailsDTO"/> representing the order with the specified ID with all details information; null if not found.
         /// </returns>
         Task<OrderDetailsDTO?> GetAsync(Guid id);
+
+        Task CancelAsync(Guid id);
     }
 }

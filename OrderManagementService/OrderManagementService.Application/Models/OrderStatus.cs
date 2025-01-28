@@ -6,6 +6,6 @@
         Confirmed,
         Delivering,
         Delivered,
-        Canceled
+        Cancelled
     }
 }

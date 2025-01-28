@@ -3,12 +3,12 @@
 namespace RepositoryService.Application.Interfaces.MessageBrokerConsumers
 {
     /// <summary>
-    /// Defines a contract for a consumer that processes messages related to canceled orders from a message broker.
+    /// Defines a contract for a consumer that processes messages related to created orders from a message broker.
     /// </summary>
-    public interface IMessageBrokerOrderCanceledConsumer
+    public interface IMessageBrokerOrderCreatedConsumer
     {
         /// <summary>
-        /// Starts consuming messages related to canceled orders.
+        /// Starts consuming messages related to created orders.
         /// </summary>
         Task ConsumeAsync();
 

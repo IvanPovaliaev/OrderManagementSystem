@@ -5,23 +5,23 @@ using System.Threading.Tasks;
 
 namespace RepositoryService.Infrastructure.Host.Services
 {
-    internal class MessageBrokerOrderCanceledHostedService : IHostedService
+    internal class MessageBrokerOrderCreatedHostedService : IHostedService
     {
-        private readonly IMessageBrokerOrderCanceledConsumer _orderCanceledConsumer;
+        private readonly IMessageBrokerOrderCreatedConsumer _orderCreatedConsumer;
 
-        public MessageBrokerOrderCanceledHostedService(IMessageBrokerOrderCanceledConsumer orderCanceledConsumer)
+        public MessageBrokerOrderCreatedHostedService(IMessageBrokerOrderCreatedConsumer orderOrderCreatedConsumer)
         {
-            _orderCanceledConsumer = orderCanceledConsumer;
+            _orderCreatedConsumer = orderOrderCreatedConsumer;
         }
 
         public async Task StartAsync(CancellationToken cancellationToken)
         {
-            await _orderCanceledConsumer.ConsumeAsync();
+            await _orderCreatedConsumer.ConsumeAsync();
         }
 
         public Task StopAsync(CancellationToken cancellationToken)
         {
-            _orderCanceledConsumer.Dispose();
+            _orderCreatedConsumer.Dispose();
             return Task.CompletedTask;
         }
     }

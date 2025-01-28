@@ -27,11 +27,17 @@ namespace RepositoryService.Infrastructure
             services.AddScoped<IProductsRepository, ProductsRepository>();
             services.AddScoped<IOrdersRepository, OrdersRepository>();
 
-            services.AddTransient<IMessageBrokerOrderCanceledConsumer, RabbitMQOrderCanceledConsumer>();
-            services.AddHostedService<MessageBrokerOrderCanceledHostedService>();
+            services.AddTransient<IMessageBrokerOrderCancelledConsumer, RabbitMQOrderCanceledConsumer>();
+            services.AddHostedService<MessageBrokerOrderCancelledHostedService>();
 
             services.AddTransient<IMessageBrokerOrderStatusChangedConsumer, RabbitMQOrderStatusChangedConsumer>();
             services.AddHostedService<MessageBrokerOrderStatusChangedHostedService>();
+
+            services.AddTransient<IMessageBrokerOrderCreatedConsumer, RabbitMQOrderCreatedConsumer>();
+            services.AddHostedService<MessageBrokerOrderCreatedHostedService>();
+
+            services.AddTransient<IMessageBrokerOrderUpdatedConsumer, RabbitMQOrderUpdatedConsumer>();
+            services.AddHostedService<MessageBrokerOrderUpdatedHostedService>();
 
             return services;
         }
