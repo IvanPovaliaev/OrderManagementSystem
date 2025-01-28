@@ -42,7 +42,7 @@ namespace OrderManagementService.API.Controllers
             return await _ordersService.ChangeStatusAsync(order) ? Ok(order) : BadRequest();
         }
 
-        [HttpPost("cancel")]
+        [HttpPost("cancel/{id}")]
         public async Task<IActionResult> Cancel(Guid id)
         {
             var isOrderExist = await _ordersService.IsExistAsync(id);
