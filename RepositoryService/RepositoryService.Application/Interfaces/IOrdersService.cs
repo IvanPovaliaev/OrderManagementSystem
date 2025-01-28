@@ -11,6 +11,8 @@ namespace RepositoryService.Application.Interfaces
     /// </summary>
     public interface IOrdersService
     {
+        Task CreateAsync(CreateOrderMessage newOrder);
+
         /// <summary>
         /// Retrieves all orders from the repository.
         /// </summary>
@@ -25,8 +27,8 @@ namespace RepositoryService.Application.Interfaces
         /// </returns>
         Task<OrderDetailsDTO?> GetAsync(Guid id);
 
-        Task CancelAsync(Guid id);
-
         Task ChangeStatusAsync(Guid id, OrderStatus newStatus);
+
+        Task CancelAsync(Guid id);
     }
 }

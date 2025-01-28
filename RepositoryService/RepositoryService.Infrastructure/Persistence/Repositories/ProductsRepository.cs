@@ -25,5 +25,10 @@ namespace RepositoryService.Infrastructure.Persistence.Repositories
         {
             return await _databaseContext.Products.FindAsync(id);
         }
+
+        public async Task UpdateAsync(Product product)
+        {
+            _databaseContext.Products.Update(product);
+        }
     }
 }

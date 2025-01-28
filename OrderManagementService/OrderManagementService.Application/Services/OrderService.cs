@@ -2,7 +2,6 @@
 using OrderManagementService.Application.Interfaces;
 using OrderManagementService.Application.Models;
 using OrderManagementService.Application.Models.Messages;
-using OrderManagementService.Infrastructure.RepositoryService.Models;
 using System;
 using System.Threading.Tasks;
 
@@ -25,6 +24,23 @@ namespace OrderManagementService.Application.Services
             _messageBrokerPublisher = messageBrokerPublisher;
         }
 
+        public async Task<bool> CreateAsync(NewOrderDTO newOrder)
+        {
+            foreach (var itemDTO in newOrder.Items)
+            {
+                if (!await IsItemCorrect(itemDTO))
+                {
+                    return false;
+                }
+            }
+
+            var routingKey = "order.create";
+            var message = _mapper.Map<CreateOrderMessage>(newOrder);
+            await _messageBrokerPublisher.PublishAsync(routingKey, message);
+
+            return true;
+        }
+
         public async Task<bool> ChangeStatusAsync(ChangeOrderStatusDTO order)
         {
             var orderDb = await _repositoryServiceClient.GetOrderByIdAsync(order.Id);
@@ -45,7 +61,7 @@ namespace OrderManagementService.Application.Services
         {
             var order = await _repositoryServiceClient.GetOrderByIdAsync(id);
 
-            if (!IsCanBeCanceled(order))
+            if (!CanBeCanceled(order))
             {
                 return false;
             }
@@ -66,9 +82,21 @@ namespace OrderManagementService.Application.Services
             return currentStatus != newStatus && newStatus != OrderStatus.Cancelled;
         }
 
-        private bool IsCanBeCanceled(OrderDTO order)
+        private bool CanBeCanceled(OrderDTO order)
         {
             return order.Status != OrderStatus.Cancelled;
+        }
+
+        private async Task<bool> IsItemCorrect(OrderItemDTO item)
+        {
+            var productDb = await _repositoryServiceClient.GetProductByIdAsync(item.ProductId);
+
+            if (productDb == null)
+            {
+                return false;
+            }
+
+            return item.Quantity <= productDb.QuantityInStock;
         }
     }
 }

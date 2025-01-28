@@ -21,9 +21,10 @@ namespace OrderManagementService.API.Controllers
         }
 
         [HttpPost("create")]
-        public async Task<IActionResult> Create([FromBody] CreateOrderDTO order)
+        public async Task<IActionResult> Create([FromBody] NewOrderDTO order)
         {
-            return BadRequest();
+            var isSuccess = await _ordersService.CreateAsync(order);
+            return isSuccess ? Ok() : BadRequest();
         }
 
         [HttpPost("update")]

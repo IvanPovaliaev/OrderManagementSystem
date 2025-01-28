@@ -1,12 +1,10 @@
 ﻿using System;
 
-namespace OrderManagementService.Infrastructure.RepositoryService.Models
+namespace OrderManagementService.Application.Models
 {
     public class OrderItemDTO
     {
-        public Guid Id { get; init; }
-        public Guid OrderId { get; init; }
-        public ProductDTO Product { get; init; }
+        public Guid ProductId { get; init; }
         public decimal UnitPrice { get; init; }
         public int Quantity { get; init; }
         public decimal TotalPrice { get; init; }

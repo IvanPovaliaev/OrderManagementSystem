@@ -13,12 +13,30 @@ namespace RepositoryService.Application.Services
     internal class OrdersService : IOrdersService
     {
         private readonly IOrdersRepository _ordersRepository;
+        private readonly IProductsService _productsService;
         private readonly IMapper _mapper;
 
-        public OrdersService(IOrdersRepository ordersRepository, IMapper mapper)
+        public OrdersService(IOrdersRepository ordersRepository, IProductsService productsService, IMapper mapper)
         {
+            _productsService = productsService;
             _ordersRepository = ordersRepository;
             _mapper = mapper;
+        }
+
+        public async Task CreateAsync(CreateOrderMessage newOrderMessage)
+        {
+            var newOrder = _mapper.Map<Order>(newOrderMessage);
+            newOrder.Status = OrderStatus.Created;
+            newOrder.StoreUntil = newOrder.CreationDate.AddDays(14);
+            newOrder.TotalItems = newOrder.Items.Sum(item => item.Quantity);
+            newOrder.TotalPrice = newOrder.Items.Sum(item => item.UnitPrice * item.Quantity);
+
+            foreach (var item in newOrder.Items)
+            {
+                await _productsService.ChangeQuantityBy(item.ProductId, -item.Quantity);
+            }
+
+            await _ordersRepository.UpdateAsync(newOrder);
         }
 
         public async Task<ICollection<OrderDTO>> GetAllAsync()

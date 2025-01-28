@@ -23,5 +23,7 @@ namespace RepositoryService.Application.Interfaces
         /// A <see cref="ProductDTO"/> representing the product with the specified ID; null if not found.
         /// </returns>
         Task<ProductDTO?> GetAsync(Guid id);
+
+        Task ChangeQuantityBy(Guid id, int quantity);
     }
 }

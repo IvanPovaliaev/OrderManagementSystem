@@ -9,15 +9,17 @@ namespace OrderManagementService.Application.Interfaces
     /// </summary>
     public interface IOrdersService
     {
+        Task<bool> CreateAsync(NewOrderDTO newOrder);
+
         /// <summary>
-        /// Сancels an order by its unique identifier.
+        /// Cancels an order by its unique identifier.
         /// </summary>
         /// <param name="id">The unique identifier of the order to cancel.</param>
         /// <returns>The task result is <c>true</c> if the order was successfully canceled; otherwise, <c>false</c>.</returns>
         Task<bool> CancelAsync(Guid id);
 
         /// <summary>
-        /// Сhanges the status of an order based on the provided data.
+        /// Changes the status of an order based on the provided data.
         /// </summary>
         /// <param name="order">The data transfer object containing the order identifier and the new status.</param>
         /// <returns>The task result is <c>true</c> if the status was successfully changed; otherwise, <c>false</c>.</returns>

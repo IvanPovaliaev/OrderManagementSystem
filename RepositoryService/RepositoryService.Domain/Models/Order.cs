@@ -6,7 +6,7 @@ namespace RepositoryService.Domain.Models
     public class Order
     {
         public Guid Id { get; init; }
-        public DateTime CreationDate { get; init; }
+        public DateTime CreationDate { get; init; } = DateTime.UtcNow;
         public DateTime StoreUntil { get; set; }
         public OrderStatus Status { get; set; }
         public string ClientFullName { get; set; }

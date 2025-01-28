@@ -1,9 +1,8 @@
-﻿using OrderManagementService.Infrastructure.RepositoryService.Models;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace OrderManagementService.Application.Models
 {
-    public class CreateOrderDTO
+    public record class NewOrderDTO
     {
         public string ClientFullName { get; init; }
         public string ClientPhone { get; init; }

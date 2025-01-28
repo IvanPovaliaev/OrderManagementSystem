@@ -19,6 +19,7 @@ namespace RepositoryService.Application.Services
             _productsRepository = productsRepository;
             _mapper = mapper;
         }
+
         public async Task<ICollection<ProductDTO>> GetAllAsync()
         {
             var dbProducts = await _productsRepository.GetAllAsync();
@@ -29,6 +30,12 @@ namespace RepositoryService.Application.Services
         {
             var dbProduct = await _productsRepository.GetAsync(id);
             return _mapper.Map<ProductDTO>(dbProduct);
+        }
+
+        public async Task ChangeQuantityBy(Guid id, int quantity)
+        {
+            var dbProduct = await _productsRepository.GetAsync(id);
+            dbProduct!.QuantityInStock += quantity;
         }
     }
 }

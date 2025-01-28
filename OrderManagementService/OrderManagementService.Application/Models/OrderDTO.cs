@@ -1,7 +1,6 @@
-﻿using OrderManagementService.Application.Models;
-using System;
+﻿using System;
 
-namespace OrderManagementService.Infrastructure.RepositoryService.Models
+namespace OrderManagementService.Application.Models
 {
     public record class OrderDTO
     {

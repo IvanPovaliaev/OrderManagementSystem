@@ -28,7 +28,7 @@ namespace RepositoryService.API
             var connection = builder.Configuration.GetConnectionString("RepositoryServiceDatabase");
             builder.Services.AddDbContext<DatabaseContext>(options => options.UseNpgsql(connection), ServiceLifetime.Scoped);
 
-            builder.Services.AddAutoMapper(typeof(ProductToProductDTOProfile).Assembly);
+            builder.Services.AddAutoMapper(typeof(MappingProfile).Assembly);
 
             builder.Services.AddApplication();
             builder.Services.AddInfrastructure(builder.Configuration);

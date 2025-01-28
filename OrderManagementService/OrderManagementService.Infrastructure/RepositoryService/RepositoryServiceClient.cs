@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 using OrderManagementService.Application.Interfaces;
-using OrderManagementService.Infrastructure.RepositoryService.Models;
+using OrderManagementService.Application.Models;
 using System;
 using System.Net.Http;
 using System.Threading.Tasks;

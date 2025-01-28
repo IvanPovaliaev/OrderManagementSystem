@@ -1,4 +1,4 @@
-﻿using OrderManagementService.Infrastructure.RepositoryService.Models;
+﻿using OrderManagementService.Application.Models;
 using System;
 using System.Threading.Tasks;
 

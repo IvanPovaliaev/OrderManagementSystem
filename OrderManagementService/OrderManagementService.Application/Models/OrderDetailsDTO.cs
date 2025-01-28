@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace OrderManagementService.Infrastructure.RepositoryService.Models
+namespace OrderManagementService.Application.Models
 {
     public record class OrderDetailsDTO : OrderDTO
     {

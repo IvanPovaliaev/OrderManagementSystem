@@ -22,5 +22,7 @@ namespace RepositoryService.Domain.Interfaces
         /// <param name="id">The unique identifier of the product.</param>
         /// <returns>The product with the specified ID; null if not found.</returns>
         Task<Product?> GetAsync(Guid id);
+
+        Task UpdateAsync(Product product);
     }
 }
