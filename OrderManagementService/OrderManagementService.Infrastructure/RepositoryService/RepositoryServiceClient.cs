@@ -7,6 +7,10 @@ using System.Threading.Tasks;
 
 namespace OrderManagementService.Infrastructure.RepositoryService
 {
+    /// <summary>
+    /// Service to interact with the repository service for retrieving information.
+    /// This class implements the <see cref="IRepositoryServiceClient"/> interface.
+    /// </summary>
     public class RepositoryServiceClient : IRepositoryServiceClient
     {
         private readonly HttpClient _httpClient;

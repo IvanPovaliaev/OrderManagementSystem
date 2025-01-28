@@ -8,6 +8,13 @@ using System.Threading.Tasks;
 
 namespace OrderManagementService.Infrastructure.RabbitMQ
 {
+    /// <summary>
+    /// Provides functionality for publishing messages to RabbitMQ.
+    /// </summary>
+    /// <remarks>
+    /// This class implements the <see cref="IMessageBrokerPublisher"/> interface and is responsible for sending messages to RabbitMQ.
+    /// It also implements <see cref="IDisposable"/> to properly release RabbitMQ connection and channel resources.
+    /// </remarks>
     internal class RabbitMQPublisher : IMessageBrokerPublisher, IDisposable
     {
         private readonly IOptionsMonitor<RabbitMQOptions> _rabbitMQOptionsMonitor;
@@ -46,6 +53,11 @@ namespace OrderManagementService.Infrastructure.RabbitMQ
             _connection.Dispose();
         }
 
+
+        /// <summary>
+        /// Declares an exchange in RabbitMQ.
+        /// </summary>
+        /// <returns>The name of the declared exchange.</returns>
         private async Task<string> DeclareExchangeAsync()
         {
             var name = _rabbitMQOptionsMonitor.CurrentValue.ExchangeName;

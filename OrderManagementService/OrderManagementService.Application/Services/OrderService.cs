@@ -8,6 +8,10 @@ using System.Threading.Tasks;
 
 namespace OrderManagementService.Application.Services
 {
+    /// <summary>
+    /// Service to interact with the repository service for retrieving information.
+    /// This class implements the <see cref="IOrdersService"/> interface.
+    /// </summary>
     internal class OrderService : IOrdersService
     {
         private readonly IRepositoryServiceClient _repositoryServiceClient;

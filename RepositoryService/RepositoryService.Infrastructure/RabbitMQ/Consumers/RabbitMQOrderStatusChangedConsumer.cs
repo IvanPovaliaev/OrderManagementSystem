@@ -65,6 +65,10 @@ namespace RepositoryService.Infrastructure.RabbitMQ.Consumers
             _connection.Dispose();
         }
 
+        /// <summary>
+        /// Declares an exchange
+        /// </summary>
+        /// <returns>The name of the declared exchange.</returns>
         private async Task<string> DeclareExchangeAsync()
         {
             var name = _rabbitMQOptionsMonitor.CurrentValue.ExchangeName;

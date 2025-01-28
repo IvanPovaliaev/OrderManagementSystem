@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace OrderManagementService.API.Controllers
 {
+    /// <summary>
+    /// Controller for managing orders
+    /// </summary>
     [Route("api/[controller]")]
     [ApiController]
     public class OrderController : ControllerBase
