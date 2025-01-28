@@ -4,8 +4,5 @@ using System;
 
 namespace RepositoryService.Application.Orders.Queries.GetOrderById
 {
-    public class GetOrderByIdQuery : IRequest<OrderDetailsDTO?>
-    {
-        public Guid Id { get; init; }
-    }
+    public record class GetOrderByIdQuery(Guid Id) : IRequest<OrderDetailsDTO?>;
 }

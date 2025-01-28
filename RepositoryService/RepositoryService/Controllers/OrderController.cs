@@ -45,7 +45,7 @@ namespace RepositoryService.API.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(Guid id)
         {
-            var query = new GetOrderByIdQuery() { Id = id };
+            var query = new GetOrderByIdQuery(id);
             var order = await _sender.Send(query);
 
             return order is null ? NotFound() : Ok(order);

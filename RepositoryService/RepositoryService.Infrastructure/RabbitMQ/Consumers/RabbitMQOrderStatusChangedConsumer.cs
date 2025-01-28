@@ -1,10 +1,11 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using MediatR;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
-using RepositoryService.Application.Interfaces;
 using RepositoryService.Application.Interfaces.MessageBrokerConsumers;
+using RepositoryService.Application.Orders.Commands.ChangeOrderStatus;
 using RepositoryService.Infrastructure.RabbitMQ.Messages;
 using System;
 using System.Text;
@@ -57,8 +58,11 @@ namespace RepositoryService.Infrastructure.RabbitMQ.Consumers
                     var orderMessage = JsonConvert.DeserializeObject<OrderStatusChangedMessage>(message);
                     using (var scope = _serviceProvider.CreateScope())
                     {
-                        var orderService = scope.ServiceProvider.GetRequiredService<IOrdersService>();
-                        await orderService.ChangeStatusAsync(orderMessage!.Id, orderMessage.NewStatus);
+                        var commandSender = scope.ServiceProvider.GetRequiredService<ISender>();
+
+                        var command = new ChangeOrderStatusCommand(orderMessage!.Id, orderMessage.NewStatus);
+
+                        await commandSender.Send(command);
                     }
                 }
             };

@@ -1,6 +1,4 @@
 ﻿using RepositoryService.Application.Models.Messages;
-using RepositoryService.Domain.Models;
-using System;
 using System.Threading.Tasks;
 
 namespace RepositoryService.Application.Interfaces
@@ -10,10 +8,6 @@ namespace RepositoryService.Application.Interfaces
     /// </summary>
     public interface IOrdersService
     {
-        Task CreateAsync(CreateOrderMessage newOrder);
-
         Task UpdateAsync(UpdateOrderMessage order);
-
-        Task ChangeStatusAsync(Guid id, OrderStatus newStatus);
     }
 }
