@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
 using RepositoryService.Application;
 using RepositoryService.Application.Mappers;
+using RepositoryService.Application.Products.Queries.GetProductById;
 using RepositoryService.Infrastructure;
 using RepositoryService.Infrastructure.Persistence;
 using Serilog;
@@ -29,6 +30,7 @@ namespace RepositoryService.API
             builder.Services.AddDbContext<DatabaseContext>(options => options.UseNpgsql(connection), ServiceLifetime.Scoped);
 
             builder.Services.AddAutoMapper(typeof(MappingProfile).Assembly);
+            builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining<GetProductByIdQuery>());
 
             builder.Services.AddApplication();
             builder.Services.AddInfrastructure(builder.Configuration);

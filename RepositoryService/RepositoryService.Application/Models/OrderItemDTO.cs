@@ -1,4 +1,5 @@
-﻿using System;
+﻿using RepositoryService.Application.Products.DTO;
+using System;
 
 namespace RepositoryService.Application.Models
 {

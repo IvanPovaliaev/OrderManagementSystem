@@ -13,7 +13,6 @@ namespace RepositoryService.Application
         /// <returns>Current service collection with new Application services</returns>
         public static IServiceCollection AddApplication(this IServiceCollection services)
         {
-            services.AddTransient<IProductsService, ProductsService>();
             services.AddTransient<IOrdersService, OrdersService>();
             return services;
         }

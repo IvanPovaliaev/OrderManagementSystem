@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace RepositoryService.Application.Models
+namespace RepositoryService.Application.Products.DTO
 {
     public record class ProductDTO
     {

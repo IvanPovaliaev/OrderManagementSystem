@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using RepositoryService.Application.Models;
 using RepositoryService.Application.Models.Messages;
+using RepositoryService.Application.Products.DTO;
 using RepositoryService.Domain.Models;
 
 namespace RepositoryService.Application.Mappers

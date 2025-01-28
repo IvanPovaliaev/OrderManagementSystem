@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
+using MediatR;
 using RepositoryService.Application.Interfaces;
 using RepositoryService.Application.Models;
 using RepositoryService.Application.Models.Messages;
+using RepositoryService.Application.Products.Commands.ChangeQuantity;
 using RepositoryService.Domain.Interfaces;
 using RepositoryService.Domain.Models;
 using System;
@@ -14,12 +16,12 @@ namespace RepositoryService.Application.Services
     internal class OrdersService : IOrdersService
     {
         private readonly IOrdersRepository _ordersRepository;
-        private readonly IProductsService _productsService;
+        private readonly ISender _sender;
         private readonly IMapper _mapper;
 
-        public OrdersService(IOrdersRepository ordersRepository, IProductsService productsService, IMapper mapper)
+        public OrdersService(IOrdersRepository ordersRepository, ISender sender, IMapper mapper)
         {
-            _productsService = productsService;
+            _sender = sender;
             _ordersRepository = ordersRepository;
             _mapper = mapper;
         }
@@ -30,7 +32,12 @@ namespace RepositoryService.Application.Services
 
             foreach (var item in newOrder.Items)
             {
-                await _productsService.ChangeQuantityBy(item.ProductId, -item.Quantity);
+                var command = new ChangeQuantityCommand()
+                {
+                    Id = item.Id,
+                    QuantityChange = -item.Quantity
+                };
+                await _sender.Send(command);
             }
 
             await _ordersRepository.AddAsync(newOrder);
@@ -47,7 +54,6 @@ namespace RepositoryService.Application.Services
             var dbOrder = await _ordersRepository.GetAsync(id);
             return _mapper.Map<OrderDetailsDTO>(dbOrder);
         }
-
 
         public async Task UpdateAsync(UpdateOrderMessage order)
         {

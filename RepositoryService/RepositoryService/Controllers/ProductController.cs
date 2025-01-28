@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using RepositoryService.Application.Interfaces;
-using RepositoryService.Application.Models;
+﻿using MediatR;
+using Microsoft.AspNetCore.Mvc;
+using RepositoryService.Application.Products.DTO;
+using RepositoryService.Application.Products.Queries.GetAllProducts;
+using RepositoryService.Application.Products.Queries.GetProductById;
 using System;
 using System.Threading.Tasks;
 
@@ -13,11 +15,11 @@ namespace RepositoryService.API.Controllers
     [ApiController]
     public class ProductController : ControllerBase
     {
-        private readonly IProductsService _productsService;
+        private readonly ISender _sender;
 
-        public ProductController(IProductsService productsService)
+        public ProductController(ISender sender)
         {
-            _productsService = productsService;
+            _sender = sender;
         }
 
         /// <summary>
@@ -28,7 +30,7 @@ namespace RepositoryService.API.Controllers
         [HttpGet("all")]
         public async Task<IActionResult> GetAll()
         {
-            var products = await _productsService.GetAllAsync();
+            var products = await _sender.Send(new GetAllProductsQuery());
 
             return Ok(products);
         }
@@ -43,7 +45,8 @@ namespace RepositoryService.API.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(Guid id)
         {
-            var product = await _productsService.GetAsync(id);
+            var query = new GetProductByIdQuery() { Id = id };
+            var product = await _sender.Send(query);
 
             return product is null ? NotFound() : Ok(product);
         }
