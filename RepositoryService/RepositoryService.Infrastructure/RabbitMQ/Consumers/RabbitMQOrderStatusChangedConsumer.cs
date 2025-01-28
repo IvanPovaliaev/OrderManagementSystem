@@ -1,7 +1,9 @@
-﻿using Microsoft.Extensions.Options;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
+using RepositoryService.Application.Interfaces;
 using RepositoryService.Application.Interfaces.MessageBrokerConsumers;
 using RepositoryService.Infrastructure.RabbitMQ.Messages;
 using System;
@@ -15,9 +17,11 @@ namespace RepositoryService.Infrastructure.RabbitMQ.Consumers
         private readonly IOptionsMonitor<RabbitMQOptions> _rabbitMQOptionsMonitor;
         private readonly IConnection _connection;
         private readonly IChannel _channel;
+        private readonly IServiceProvider _serviceProvider;
 
-        public RabbitMQOrderStatusChangedConsumer(IOptionsMonitor<RabbitMQOptions> rabbitMQOptionsMonitor)
+        public RabbitMQOrderStatusChangedConsumer(IOptionsMonitor<RabbitMQOptions> rabbitMQOptionsMonitor, IServiceProvider serviceProvider)
         {
+            _serviceProvider = serviceProvider;
             _rabbitMQOptionsMonitor = rabbitMQOptionsMonitor;
             var options = _rabbitMQOptionsMonitor.CurrentValue;
             var factory = new ConnectionFactory()
@@ -34,7 +38,7 @@ namespace RepositoryService.Infrastructure.RabbitMQ.Consumers
 
         public async Task ConsumeAsync()
         {
-            var routingKey = "order.status.changed";
+            var routingKey = "order.change.status";
             var queueName = "repository.orders.status.changed.queue";
             var exchangeName = await DeclareExchangeAsync();
 
@@ -43,17 +47,20 @@ namespace RepositoryService.Infrastructure.RabbitMQ.Consumers
 
             var consumer = new AsyncEventingBasicConsumer(_channel);
 
-            consumer.ReceivedAsync += (sender, args) =>
+            consumer.ReceivedAsync += async (sender, args) =>
             {
                 var body = args.Body.ToArray();
                 var message = Encoding.UTF8.GetString(body);
 
                 if (message is not null)
                 {
-                    var orderId = JsonConvert.DeserializeObject<OrderStatusChangedMessage>(message);
+                    var orderMessage = JsonConvert.DeserializeObject<OrderStatusChangedMessage>(message);
+                    using (var scope = _serviceProvider.CreateScope())
+                    {
+                        var orderService = scope.ServiceProvider.GetRequiredService<IOrdersService>();
+                        await orderService.ChangeStatusAsync(orderMessage!.Id, orderMessage.NewStatus);
+                    }
                 }
-
-                return Task.CompletedTask;
             };
 
             await _channel.BasicConsumeAsync(queue: queueName, autoAck: true, consumer: consumer);

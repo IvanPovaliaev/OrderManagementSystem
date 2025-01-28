@@ -9,9 +9,9 @@ namespace RepositoryService.Infrastructure.Host.Services
     {
         private readonly IMessageBrokerOrderCreatedConsumer _orderCreatedConsumer;
 
-        public MessageBrokerOrderCreatedHostedService(IMessageBrokerOrderCreatedConsumer orderOrderCreatedConsumer)
+        public MessageBrokerOrderCreatedHostedService(IMessageBrokerOrderCreatedConsumer orderCreatedConsumer)
         {
-            _orderCreatedConsumer = orderOrderCreatedConsumer;
+            _orderCreatedConsumer = orderCreatedConsumer;
         }
 
         public async Task StartAsync(CancellationToken cancellationToken)

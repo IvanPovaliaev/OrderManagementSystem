@@ -45,5 +45,18 @@ namespace RepositoryService.Application.Services
             dbOrder.Status = OrderStatus.Cancelled;
             await _ordersRepository.UpdateAsync(dbOrder);
         }
+
+        public async Task ChangeStatusAsync(Guid id, OrderStatus newStatus)
+        {
+            var dbOrder = await _ordersRepository.GetAsync(id);
+
+            if (dbOrder is null)
+            {
+                return;
+            }
+
+            dbOrder.Status = newStatus;
+            await _ordersRepository.UpdateAsync(dbOrder);
+        }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using RepositoryService.Application.Models;
+using RepositoryService.Domain.Models;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -25,5 +26,7 @@ namespace RepositoryService.Application.Interfaces
         Task<OrderDetailsDTO?> GetAsync(Guid id);
 
         Task CancelAsync(Guid id);
+
+        Task ChangeStatusAsync(Guid id, OrderStatus newStatus);
     }
 }

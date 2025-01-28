@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Options;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
@@ -10,16 +11,16 @@ using System.Threading.Tasks;
 
 namespace RepositoryService.Infrastructure.RabbitMQ.Consumers
 {
-    internal class RabbitMQOrderCanceledConsumer : IMessageBrokerOrderCancelledConsumer, IDisposable
+    internal class RabbitMQOrderCancelledConsumer : IMessageBrokerOrderCancelledConsumer, IDisposable
     {
         private readonly IOptionsMonitor<RabbitMQOptions> _rabbitMQOptionsMonitor;
         private readonly IConnection _connection;
         private readonly IChannel _channel;
-        private readonly IOrdersService _ordersService;
+        private readonly IServiceProvider _serviceProvider;
 
-        public RabbitMQOrderCanceledConsumer(IOptionsMonitor<RabbitMQOptions> rabbitMQOptionsMonitor, IOrdersService ordersService)
+        public RabbitMQOrderCancelledConsumer(IOptionsMonitor<RabbitMQOptions> rabbitMQOptionsMonitor, IServiceProvider serviceProvider)
         {
-            _ordersService = ordersService;
+            _serviceProvider = serviceProvider;
             _rabbitMQOptionsMonitor = rabbitMQOptionsMonitor;
             var options = _rabbitMQOptionsMonitor.CurrentValue;
             var factory = new ConnectionFactory()
@@ -53,8 +54,12 @@ namespace RepositoryService.Infrastructure.RabbitMQ.Consumers
                 if (message is not null)
                 {
                     var orderId = JsonConvert.DeserializeObject<Guid>(message);
-                    //await _ordersService.CancelAsync(orderId);
-                    await Task.Run(() => Task.Delay(1000));
+
+                    using (var scope = _serviceProvider.CreateScope())
+                    {
+                        var orderService = scope.ServiceProvider.GetRequiredService<IOrdersService>();
+                        await orderService.CancelAsync(orderId);
+                    }
                 }
             };
 
