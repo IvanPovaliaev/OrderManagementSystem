@@ -14,6 +14,7 @@ namespace OrderManagementService.Application
         public static IServiceCollection AddApplication(this IServiceCollection services)
         {
             services.AddTransient<IOrdersService, OrderService>();
+
             return services;
         }
     }

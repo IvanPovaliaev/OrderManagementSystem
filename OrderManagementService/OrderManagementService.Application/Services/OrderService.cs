@@ -1,8 +1,11 @@
 ﻿using AutoMapper;
+using Microsoft.Extensions.Options;
 using OrderManagementService.Application.Interfaces;
 using OrderManagementService.Application.Models;
 using OrderManagementService.Application.Models.Messages;
+using OrderManagementService.Application.Models.Options;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace OrderManagementService.Application.Services
@@ -16,11 +19,13 @@ namespace OrderManagementService.Application.Services
         private readonly IRepositoryServiceClient _repositoryServiceClient;
         private readonly IMapper _mapper;
         private readonly IMessageBrokerPublisher _messageBrokerPublisher;
+        private readonly OrdersOptions _ordersOptions;
 
-        public OrderService(IRepositoryServiceClient repositoryServiceClient, IMapper mapper, IMessageBrokerPublisher messageBrokerPublisher)
+        public OrderService(IRepositoryServiceClient repositoryServiceClient, IMapper mapper, IOptions<OrdersOptions> ordersOptions, IMessageBrokerPublisher messageBrokerPublisher)
         {
             _repositoryServiceClient = repositoryServiceClient;
             _mapper = mapper;
+            _ordersOptions = ordersOptions.Value;
             _messageBrokerPublisher = messageBrokerPublisher;
         }
 
@@ -35,7 +40,13 @@ namespace OrderManagementService.Application.Services
             }
 
             var routingKey = "order.create";
-            var message = _mapper.Map<CreateOrderMessage>(newOrder);
+            var message = _mapper.Map<CreateOrderMessage>(newOrder) with
+            {
+                StoreUntil = DateTime.UtcNow.AddDays(_ordersOptions.StorageDays),
+                TotalItems = newOrder.Items.Sum(item => item.Quantity),
+                TotalPrice = newOrder.Items.Sum(item => item.Quantity * item.UnitPrice)
+            };
+
             await _messageBrokerPublisher.PublishAsync(routingKey, message);
 
             return true;

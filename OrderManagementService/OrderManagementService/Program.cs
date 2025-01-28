@@ -1,8 +1,10 @@
 using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
 using OrderManagementService.Application;
 using OrderManagementService.Application.Models.Mappers;
+using OrderManagementService.Application.Models.Options;
 using OrderManagementService.Infrastructure;
 using Serilog;
 using System;
@@ -22,6 +24,11 @@ namespace OrderManagementService.API
                         .Enrich.WithProperty("ApplicationName", "OrderManagementService"));
 
             builder.Services.AddAutoMapper(typeof(MappingProfile).Assembly);
+
+            var ordersConfiguration = builder.Configuration.GetSection("OrdersOptions");
+
+            builder.Services.AddOptions<OrdersOptions>()
+                            .Bind(ordersConfiguration);
 
             builder.Services.AddControllers();
 

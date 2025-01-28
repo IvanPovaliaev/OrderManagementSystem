@@ -26,10 +26,6 @@ namespace RepositoryService.Application.Services
         public async Task CreateAsync(CreateOrderMessage newOrderMessage)
         {
             var newOrder = _mapper.Map<Order>(newOrderMessage);
-            newOrder.Status = OrderStatus.Created;
-            newOrder.StoreUntil = newOrder.CreationDate.AddDays(14);
-            newOrder.TotalItems = newOrder.Items.Sum(item => item.Quantity);
-            newOrder.TotalPrice = newOrder.Items.Sum(item => item.UnitPrice * item.Quantity);
 
             foreach (var item in newOrder.Items)
             {
