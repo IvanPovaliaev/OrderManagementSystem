@@ -5,7 +5,7 @@ using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using RepositoryService.Application.Interfaces;
 using RepositoryService.Application.Interfaces.MessageBrokerConsumers;
-using RepositoryService.Application.Models;
+using RepositoryService.Application.Models.Messages;
 using System;
 using System.Text;
 using System.Threading.Tasks;

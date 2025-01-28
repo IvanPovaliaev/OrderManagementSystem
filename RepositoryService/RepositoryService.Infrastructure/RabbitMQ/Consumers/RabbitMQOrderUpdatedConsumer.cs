@@ -1,8 +1,11 @@
-﻿using Microsoft.Extensions.Options;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
+using RepositoryService.Application.Interfaces;
 using RepositoryService.Application.Interfaces.MessageBrokerConsumers;
+using RepositoryService.Infrastructure.RabbitMQ.Messages;
 using System;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,9 +17,11 @@ namespace RepositoryService.Infrastructure.RabbitMQ.Consumers
         private readonly IOptionsMonitor<RabbitMQOptions> _rabbitMQOptionsMonitor;
         private readonly IConnection _connection;
         private readonly IChannel _channel;
+        private readonly IServiceProvider _serviceProvider;
 
-        public RabbitMQOrderUpdatedConsumer(IOptionsMonitor<RabbitMQOptions> rabbitMQOptionsMonitor)
+        public RabbitMQOrderUpdatedConsumer(IOptionsMonitor<RabbitMQOptions> rabbitMQOptionsMonitor, IServiceProvider serviceProvider)
         {
+            _serviceProvider = serviceProvider;
             _rabbitMQOptionsMonitor = rabbitMQOptionsMonitor;
             var options = _rabbitMQOptionsMonitor.CurrentValue;
             var factory = new ConnectionFactory()
@@ -49,7 +54,12 @@ namespace RepositoryService.Infrastructure.RabbitMQ.Consumers
 
                 if (message is not null)
                 {
-                    var orderId = JsonConvert.DeserializeObject<Guid>(message);
+                    var orderMessage = JsonConvert.DeserializeObject<OrderStatusChangedMessage>(message);
+                    using (var scope = _serviceProvider.CreateScope())
+                    {
+                        var orderService = scope.ServiceProvider.GetRequiredService<IOrdersService>();
+                        await orderService.UpdateAsync(orderMessage!.Id, orderMessage.NewStatus);
+                    }
                 }
 
                 return Task.CompletedTask;

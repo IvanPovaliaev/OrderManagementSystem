@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using RepositoryService.Application.Interfaces;
 using RepositoryService.Application.Models;
+using RepositoryService.Application.Models.Messages;
 using RepositoryService.Domain.Interfaces;
 using RepositoryService.Domain.Models;
 using System;
@@ -45,6 +46,19 @@ namespace RepositoryService.Application.Services
         {
             var dbOrder = await _ordersRepository.GetAsync(id);
             return _mapper.Map<OrderDetailsDTO>(dbOrder);
+        }
+
+
+        public async Task UpdateAsync(UpdateOrderMessage order)
+        {
+            var dbOrder = await _ordersRepository.GetAsync(order.Id);
+
+            if (dbOrder is null)
+            {
+                return;
+            }
+
+
         }
 
         public async Task CancelAsync(Guid id)

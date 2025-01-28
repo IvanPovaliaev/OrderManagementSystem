@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using RepositoryService.Application.Models;
+using RepositoryService.Application.Models.Messages;
 using RepositoryService.Domain.Models;
 
 namespace RepositoryService.Application.Mappers

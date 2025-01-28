@@ -9,6 +9,7 @@ namespace OrderManagementService.Application.Models.Mappers
         {
             CreateMap<ChangeOrderStatusDTO, OrderStatusChangedMessage>();
             CreateMap<NewOrderDTO, CreateOrderMessage>();
+            CreateMap<UpdateOrderDTO, UpdateOrderMessage>();
         }
     }
 }

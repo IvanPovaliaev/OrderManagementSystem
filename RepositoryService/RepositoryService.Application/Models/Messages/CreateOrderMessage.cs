@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace RepositoryService.Application.Models
+namespace RepositoryService.Application.Models.Messages
 {
     public record class CreateOrderMessage
     {

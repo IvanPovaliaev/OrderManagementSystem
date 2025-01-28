@@ -52,6 +52,28 @@ namespace OrderManagementService.Application.Services
             return true;
         }
 
+        public async Task<bool> UpdateAsync(UpdateOrderDTO order)
+        {
+            foreach (var itemDTO in order.Items)
+            {
+                if (!await IsItemCorrect(itemDTO))
+                {
+                    return false;
+                }
+            }
+
+            var routingKey = "order.update";
+            var message = _mapper.Map<CreateOrderMessage>(order) with
+            {
+                TotalItems = order.Items.Sum(item => item.Quantity),
+                TotalPrice = order.Items.Sum(item => item.Quantity * item.UnitPrice)
+            };
+
+            await _messageBrokerPublisher.PublishAsync(routingKey, message);
+
+            return true;
+        }
+
         public async Task<bool> ChangeStatusAsync(ChangeOrderStatusDTO order)
         {
             var orderDb = await _repositoryServiceClient.GetOrderByIdAsync(order.Id);

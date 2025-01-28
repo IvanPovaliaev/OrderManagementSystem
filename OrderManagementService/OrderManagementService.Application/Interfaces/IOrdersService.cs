@@ -11,6 +11,8 @@ namespace OrderManagementService.Application.Interfaces
     {
         Task<bool> CreateAsync(NewOrderDTO newOrder);
 
+        Task<bool> UpdateAsync(UpdateOrderDTO order);
+
         /// <summary>
         /// Cancels an order by its unique identifier.
         /// </summary>

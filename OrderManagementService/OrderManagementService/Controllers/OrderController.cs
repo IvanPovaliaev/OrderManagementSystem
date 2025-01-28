@@ -30,7 +30,8 @@ namespace OrderManagementService.API.Controllers
         [HttpPost("update")]
         public async Task<IActionResult> Update([FromBody] UpdateOrderDTO order)
         {
-            return BadRequest();
+            var isSuccess = await _ordersService.UpdateAsync(order);
+            return isSuccess ? Ok() : BadRequest();
         }
 
         [HttpPost("changeStatus")]

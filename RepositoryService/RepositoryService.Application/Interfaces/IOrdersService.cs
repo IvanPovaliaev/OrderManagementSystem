@@ -1,4 +1,5 @@
 ﻿using RepositoryService.Application.Models;
+using RepositoryService.Application.Models.Messages;
 using RepositoryService.Domain.Models;
 using System;
 using System.Collections.Generic;
@@ -26,6 +27,8 @@ namespace RepositoryService.Application.Interfaces
         /// A <see cref="OrderDetailsDTO"/> representing the order with the specified ID with all details information; null if not found.
         /// </returns>
         Task<OrderDetailsDTO?> GetAsync(Guid id);
+
+        Task UpdateAsync(UpdateOrderMessage order);
 
         Task ChangeStatusAsync(Guid id, OrderStatus newStatus);
 

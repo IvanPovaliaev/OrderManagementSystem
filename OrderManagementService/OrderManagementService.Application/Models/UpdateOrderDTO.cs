@@ -1,6 +1,11 @@
-﻿namespace OrderManagementService.Application.Models
+﻿using System;
+using System.Collections.Generic;
+
+namespace OrderManagementService.Application.Models
 {
-    public class UpdateOrderDTO
+    public record class UpdateOrderDTO
     {
+        public Guid Id { get; init; }
+        public List<OrderItemDTO> Items { get; init; }
     }
 }
