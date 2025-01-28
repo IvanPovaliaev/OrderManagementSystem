@@ -1,10 +1,11 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using MediatR;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
-using RepositoryService.Application.Interfaces;
 using RepositoryService.Application.Interfaces.MessageBrokerConsumers;
+using RepositoryService.Application.Orders.Commands.CancelOrder;
 using System;
 using System.Text;
 using System.Threading.Tasks;
@@ -57,8 +58,8 @@ namespace RepositoryService.Infrastructure.RabbitMQ.Consumers
 
                     using (var scope = _serviceProvider.CreateScope())
                     {
-                        var orderService = scope.ServiceProvider.GetRequiredService<IOrdersService>();
-                        await orderService.CancelAsync(orderId);
+                        var commandSender = scope.ServiceProvider.GetRequiredService<ISender>();
+                        await commandSender.Send(new CancelOrderCommand(orderId));
                     }
                 }
             };

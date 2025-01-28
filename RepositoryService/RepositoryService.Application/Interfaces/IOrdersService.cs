@@ -15,7 +15,5 @@ namespace RepositoryService.Application.Interfaces
         Task UpdateAsync(UpdateOrderMessage order);
 
         Task ChangeStatusAsync(Guid id, OrderStatus newStatus);
-
-        Task CancelAsync(Guid id);
     }
 }
