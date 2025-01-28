@@ -10,6 +10,8 @@ namespace RepositoryService.Domain.Interfaces
     /// </summary>
     public interface IOrdersRepository
     {
+        Task AddAsync(Order order);
+
         /// <summary>
         /// Retrieves all orders.
         /// </summary>

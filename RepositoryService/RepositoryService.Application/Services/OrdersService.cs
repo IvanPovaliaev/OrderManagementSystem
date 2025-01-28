@@ -32,7 +32,7 @@ namespace RepositoryService.Application.Services
                 await _productsService.ChangeQuantityBy(item.ProductId, -item.Quantity);
             }
 
-            await _ordersRepository.UpdateAsync(newOrder);
+            await _ordersRepository.AddAsync(newOrder);
         }
 
         public async Task<ICollection<OrderDTO>> GetAllAsync()

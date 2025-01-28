@@ -16,6 +16,12 @@ namespace RepositoryService.Infrastructure.Persistence.Repositories
             _databaseContext = databaseContext;
         }
 
+        public async Task AddAsync(Order order)
+        {
+            _databaseContext.Attach(order);
+            await _databaseContext.SaveChangesAsync();
+        }
+
         public async Task<ICollection<Order>> GetAllAsync()
         {
             return await _databaseContext.Orders.Include(o => o.Items)
