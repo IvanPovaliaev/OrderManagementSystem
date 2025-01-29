@@ -21,7 +21,6 @@ namespace RepositoryService.Application.Orders.Commands.CancelOrder
             _sender = sender;
         }
 
-
         public async Task Handle(CancelOrderCommand request, CancellationToken cancellationToken)
         {
             var dbOrder = await _ordersRepository.GetAsync(request.Id);
@@ -35,12 +34,7 @@ namespace RepositoryService.Application.Orders.Commands.CancelOrder
 
             foreach (var item in dbOrder.Items)
             {
-                var command = new ChangeQuantityCommand()
-                {
-                    Id = item.ProductId,
-                    QuantityChange = item.Quantity
-                };
-
+                var command = new ChangeQuantityCommand(item.ProductId, item.Quantity);
                 await _sender.Send(command);
             }
 

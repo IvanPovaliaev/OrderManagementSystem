@@ -36,7 +36,7 @@ namespace RepositoryService.API.Controllers
         }
 
         /// <summary>
-        /// Retrieves a order by its unique identifier.
+        /// Retrieves a order with details by its unique identifier.
         /// </summary>
         /// <param name="id">The unique identifier of the order.</param>
         /// <returns>The <see cref="OrderDetailsDTO"/> instance if found, or <c>404 Not Found</c> if not found.</returns>

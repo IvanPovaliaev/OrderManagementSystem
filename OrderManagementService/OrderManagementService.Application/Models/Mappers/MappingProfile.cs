@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using OrderManagementService.Application.Models.DTOs;
 using OrderManagementService.Application.Models.Messages;
 
 namespace OrderManagementService.Application.Models.Mappers
@@ -9,7 +10,6 @@ namespace OrderManagementService.Application.Models.Mappers
         {
             CreateMap<ChangeOrderStatusDTO, OrderStatusChangedMessage>();
             CreateMap<NewOrderDTO, CreateOrderMessage>();
-            CreateMap<UpdateOrderDTO, UpdateOrderMessage>();
         }
     }
 }

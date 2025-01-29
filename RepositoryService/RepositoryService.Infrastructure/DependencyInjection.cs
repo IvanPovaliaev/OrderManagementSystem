@@ -36,7 +36,7 @@ namespace RepositoryService.Infrastructure
             services.AddTransient<IMessageBrokerOrderCreatedConsumer, RabbitMQOrderCreatedConsumer>();
             services.AddHostedService<MessageBrokerOrderCreatedHostedService>();
 
-            services.AddTransient<IMessageBrokerOrderUpdatedConsumer, RabbitMQOrderUpdatedConsumer>();
+            services.AddTransient<IMessageBrokerUpdateOrdersItemConsumer, RabbitMQUpdateOrderItemsConsumer>();
             services.AddHostedService<MessageBrokerOrderUpdatedHostedService>();
 
             return services;

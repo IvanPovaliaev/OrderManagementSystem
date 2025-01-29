@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using OrderManagementService.Application.Interfaces;
-using OrderManagementService.Application.Models;
+using OrderManagementService.Application.Models.DTOs;
 using System;
 using System.Threading.Tasks;
 
@@ -28,9 +28,9 @@ namespace OrderManagementService.API.Controllers
         }
 
         [HttpPost("update")]
-        public async Task<IActionResult> Update([FromBody] UpdateOrderDTO order)
+        public async Task<IActionResult> Update([FromBody] UpdateOrderItemsDTO order)
         {
-            var isSuccess = await _ordersService.UpdateAsync(order);
+            var isSuccess = await _ordersService.UpdateItemsAsync(order);
             return isSuccess ? Ok() : BadRequest();
         }
 

@@ -30,12 +30,7 @@ namespace RepositoryService.Application.Orders.Commands.CreateOrder
 
             foreach (var item in newOrder.Items)
             {
-                var command = new ChangeQuantityCommand()
-                {
-                    Id = item.ProductId,
-                    QuantityChange = -item.Quantity
-                };
-
+                var command = new ChangeQuantityCommand(item.ProductId, -item.Quantity);
                 await _sender.Send(command);
             }
 

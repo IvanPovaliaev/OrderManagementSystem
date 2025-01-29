@@ -1,8 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 
-namespace OrderManagementService.Application.Models
+namespace OrderManagementService.Application.Models.DTOs
 {
-    public record class OrderDTO
+    public record OrderDTO
     {
         public Guid Id { get; init; }
         public DateTime CreationDate { get; init; }
@@ -10,6 +11,7 @@ namespace OrderManagementService.Application.Models
         public OrderStatus Status { get; init; }
         public string ClientFullName { get; init; }
         public string ClientPhone { get; init; }
+        public List<OrderItemDTO> Items { get; init; }
         public int TotalItems { get; init; }
         public decimal TotalPrice { get; init; }
     }

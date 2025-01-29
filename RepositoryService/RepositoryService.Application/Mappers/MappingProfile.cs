@@ -12,8 +12,7 @@ namespace RepositoryService.Application.Mappers
         {
             CreateMap<Order, OrderDTO>().ReverseMap();
             CreateMap<Order, OrderDetailsDTO>();
-            CreateMap<OrderItem, OrderItemDTO>();
-            CreateMap<OrderItemRequest, OrderItem>();
+            CreateMap<OrderItem, OrderItemDTO>().ReverseMap();
 
             CreateMap<CreateOrderMessage, Order>();
 

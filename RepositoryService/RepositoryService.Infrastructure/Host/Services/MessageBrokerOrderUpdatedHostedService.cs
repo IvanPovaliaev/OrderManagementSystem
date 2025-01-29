@@ -7,9 +7,9 @@ namespace RepositoryService.Infrastructure.Host.Services
 {
     internal class MessageBrokerOrderUpdatedHostedService : IHostedService
     {
-        private readonly IMessageBrokerOrderUpdatedConsumer _orderUpdatedConsumer;
+        private readonly IMessageBrokerUpdateOrdersItemConsumer _orderUpdatedConsumer;
 
-        public MessageBrokerOrderUpdatedHostedService(IMessageBrokerOrderUpdatedConsumer orderOrderUpdatedConsumer)
+        public MessageBrokerOrderUpdatedHostedService(IMessageBrokerUpdateOrdersItemConsumer orderOrderUpdatedConsumer)
         {
             _orderUpdatedConsumer = orderOrderUpdatedConsumer;
         }

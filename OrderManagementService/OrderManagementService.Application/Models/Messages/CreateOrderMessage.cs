@@ -1,9 +1,10 @@
-﻿using System;
+﻿using OrderManagementService.Application.Models.DTOs;
+using System;
 using System.Collections.Generic;
 
 namespace OrderManagementService.Application.Models.Messages
 {
-    internal record class CreateOrderMessage
+    internal record CreateOrderMessage
     {
         public DateTime CreationDate { get; init; } = DateTime.UtcNow;
         public DateTime StoreUntil { get; init; }

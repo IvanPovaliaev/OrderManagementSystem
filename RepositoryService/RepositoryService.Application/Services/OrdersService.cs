@@ -6,7 +6,7 @@ namespace RepositoryService.Application.Services
 {
     internal class OrdersService : IOrdersService
     {
-        public async Task UpdateAsync(UpdateOrderMessage order)
+        public async Task UpdateAsync(UpdateOrderItemsMessage order)
         {
         }
     }

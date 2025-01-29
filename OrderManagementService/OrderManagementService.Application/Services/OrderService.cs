@@ -2,9 +2,11 @@
 using Microsoft.Extensions.Options;
 using OrderManagementService.Application.Interfaces;
 using OrderManagementService.Application.Models;
+using OrderManagementService.Application.Models.DTOs;
 using OrderManagementService.Application.Models.Messages;
 using OrderManagementService.Application.Models.Options;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -31,9 +33,10 @@ namespace OrderManagementService.Application.Services
 
         public async Task<bool> CreateAsync(NewOrderDTO newOrder)
         {
-            foreach (var itemDTO in newOrder.Items)
+            foreach (var item in newOrder.Items)
             {
-                if (!await IsItemCorrect(itemDTO))
+                var isItemCorrect = await IsItemCorrectAsync(item, item.Quantity);
+                if (!isItemCorrect)
                 {
                     return false;
                 }
@@ -52,21 +55,61 @@ namespace OrderManagementService.Application.Services
             return true;
         }
 
-        public async Task<bool> UpdateAsync(UpdateOrderDTO order)
+        public async Task<bool> UpdateItemsAsync(UpdateOrderItemsDTO order)
         {
-            foreach (var itemDTO in order.Items)
+            var orderDb = await _repositoryServiceClient.GetOrderByIdAsync(order.Id);
+
+            if (orderDb is null)
             {
-                if (!await IsItemCorrect(itemDTO))
-                {
-                    return false;
-                }
+                return false;
             }
 
-            var routingKey = "order.update";
-            var message = _mapper.Map<CreateOrderMessage>(order) with
+            var newItems = order.Items;
+            var currentItems = orderDb.Items.ToDictionary(i => i.ProductId);
+            var addedItems = new List<OrderItemDTO>();
+            var updatedItems = new List<OrderItemDTO>();
+
+            foreach (var item in newItems)
             {
-                TotalItems = order.Items.Sum(item => item.Quantity),
-                TotalPrice = order.Items.Sum(item => item.Quantity * item.UnitPrice)
+                if (!currentItems.TryGetValue(item.ProductId, out var existingItem))
+                {
+                    var isItemCorrect = await IsItemCorrectAsync(item, item.Quantity);
+                    if (!isItemCorrect)
+                    {
+                        return false;
+                    }
+
+                    addedItems.Add(item);
+                }
+                else if (existingItem.Quantity != item.Quantity)
+                {
+                    var quantityChange = item.Quantity - existingItem.Quantity;
+
+                    if (quantityChange > 0 && !await IsItemCorrectAsync(item, quantityChange))
+                    {
+                        return false;
+                    }
+
+                    updatedItems.Add(item);
+                }
+
+                currentItems.Remove(item.ProductId);
+            }
+
+            var removedProductsId = currentItems.Values
+                                                .Select(i => i.ProductId)
+                                                .ToList();
+
+            var routingKey = "order.update.items";
+            var message = new UpdateOrderItemsMessage
+            {
+                Id = order.Id,
+                AddedItems = addedItems,
+                UpdatedItems = updatedItems,
+                RemovedProductIds = removedProductsId,
+                TotalItems = addedItems.Sum(item => item.Quantity) + updatedItems.Sum(item => item.Quantity),
+                TotalPrice = addedItems.Sum(item => item.Quantity * item.UnitPrice) +
+                                                    updatedItems.Sum(item => item.Quantity * item.UnitPrice)
             };
 
             await _messageBrokerPublisher.PublishAsync(routingKey, message);
@@ -115,21 +158,18 @@ namespace OrderManagementService.Application.Services
             return currentStatus != newStatus && newStatus != OrderStatus.Cancelled;
         }
 
-        private bool CanBeCanceled(OrderDTO order)
-        {
-            return order.Status != OrderStatus.Cancelled;
-        }
+        private bool CanBeCanceled(OrderDTO order) => order.Status != OrderStatus.Cancelled;
 
-        private async Task<bool> IsItemCorrect(OrderItemDTO item)
+        private async Task<bool> IsItemCorrectAsync(OrderItemDTO item, int quantityChange)
         {
             var productDb = await _repositoryServiceClient.GetProductByIdAsync(item.ProductId);
 
-            if (productDb == null)
+            if (productDb == null || quantityChange > productDb.QuantityInStock)
             {
                 return false;
             }
 
-            return item.Quantity <= productDb.QuantityInStock;
+            return true;
         }
     }
 }

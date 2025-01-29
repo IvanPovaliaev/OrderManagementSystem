@@ -58,7 +58,7 @@ namespace RepositoryService.Infrastructure.RabbitMQ.Consumers
 
                 if (message is not null)
                 {
-                    var orderMessage = JsonConvert.DeserializeObject<OrderStatusChangedMessage>(message);
+                    var orderMessage = JsonConvert.DeserializeObject<ChangeOrderStatusMessage>(message);
                     using (var scope = _serviceProvider.CreateScope())
                     {
                         var commandSender = scope.ServiceProvider.GetRequiredService<ISender>();

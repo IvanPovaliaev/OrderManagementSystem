@@ -8,6 +8,6 @@ namespace RepositoryService.Application.Interfaces
     /// </summary>
     public interface IOrdersService
     {
-        Task UpdateAsync(UpdateOrderMessage order);
+        Task UpdateAsync(UpdateOrderItemsMessage order);
     }
 }

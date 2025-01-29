@@ -1,4 +1,4 @@
-﻿using OrderManagementService.Application.Models;
+﻿using OrderManagementService.Application.Models.DTOs;
 using System;
 using System.Threading.Tasks;
 

@@ -1,4 +1,4 @@
-﻿using OrderManagementService.Application.Models;
+﻿using OrderManagementService.Application.Models.DTOs;
 using System;
 using System.Threading.Tasks;
 
@@ -11,7 +11,7 @@ namespace OrderManagementService.Application.Interfaces
     {
         Task<bool> CreateAsync(NewOrderDTO newOrder);
 
-        Task<bool> UpdateAsync(UpdateOrderDTO order);
+        Task<bool> UpdateItemsAsync(UpdateOrderItemsDTO order);
 
         /// <summary>
         /// Cancels an order by its unique identifier.

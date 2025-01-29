@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace OrderManagementService.Application.Models
+namespace OrderManagementService.Application.Models.DTOs
 {
-    public class OrderItemDTO
+    public record OrderItemDTO
     {
         public Guid ProductId { get; init; }
         public decimal UnitPrice { get; init; }

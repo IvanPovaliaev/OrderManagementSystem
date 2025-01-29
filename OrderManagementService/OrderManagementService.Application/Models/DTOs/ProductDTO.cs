@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace OrderManagementService.Application.Models
+namespace OrderManagementService.Application.Models.DTOs
 {
     public record class ProductDTO
     {

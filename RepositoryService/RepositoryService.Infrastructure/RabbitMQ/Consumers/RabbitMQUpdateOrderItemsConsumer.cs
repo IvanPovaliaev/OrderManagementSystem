@@ -1,10 +1,12 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using MediatR;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using RepositoryService.Application.Interfaces.MessageBrokerConsumers;
-using RepositoryService.Infrastructure.RabbitMQ.Messages;
+using RepositoryService.Application.Models.Messages;
+using RepositoryService.Application.Orders.Commands.UpdateOrderItems;
 using System;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,14 +16,14 @@ namespace RepositoryService.Infrastructure.RabbitMQ.Consumers
     /// <summary>
     /// Represents a consumer for RabbitMQ order updated messages.
     /// </summary>
-    internal class RabbitMQOrderUpdatedConsumer : IMessageBrokerOrderUpdatedConsumer, IDisposable
+    internal class RabbitMQUpdateOrderItemsConsumer : IMessageBrokerUpdateOrdersItemConsumer, IDisposable
     {
         private readonly IOptionsMonitor<RabbitMQOptions> _rabbitMQOptionsMonitor;
         private readonly IConnection _connection;
         private readonly IChannel _channel;
         private readonly IServiceProvider _serviceProvider;
 
-        public RabbitMQOrderUpdatedConsumer(IOptionsMonitor<RabbitMQOptions> rabbitMQOptionsMonitor, IServiceProvider serviceProvider)
+        public RabbitMQUpdateOrderItemsConsumer(IOptionsMonitor<RabbitMQOptions> rabbitMQOptionsMonitor, IServiceProvider serviceProvider)
         {
             _serviceProvider = serviceProvider;
             _rabbitMQOptionsMonitor = rabbitMQOptionsMonitor;
@@ -40,8 +42,8 @@ namespace RepositoryService.Infrastructure.RabbitMQ.Consumers
 
         public async Task ConsumeAsync()
         {
-            var routingKey = "order.update";
-            var queueName = "repository.orders.update.queue";
+            var routingKey = "order.update.items";
+            var queueName = "repository.orders.update.items.queue";
             var exchangeName = await DeclareExchangeAsync();
 
             await _channel.QueueDeclareAsync(queue: queueName, durable: true, exclusive: false, autoDelete: false, arguments: null);
@@ -49,22 +51,23 @@ namespace RepositoryService.Infrastructure.RabbitMQ.Consumers
 
             var consumer = new AsyncEventingBasicConsumer(_channel);
 
-            consumer.ReceivedAsync += (sender, args) =>
+            consumer.ReceivedAsync += async (sender, args) =>
             {
                 var body = args.Body.ToArray();
                 var message = Encoding.UTF8.GetString(body);
 
                 if (message is not null)
                 {
-                    var orderMessage = JsonConvert.DeserializeObject<OrderStatusChangedMessage>(message);
+                    var orderMessage = JsonConvert.DeserializeObject<UpdateOrderItemsMessage>(message);
                     using (var scope = _serviceProvider.CreateScope())
                     {
-                        //var orderService = scope.ServiceProvider.GetRequiredService<IOrdersService>();
-                        //await orderService.UpdateAsync(orderMessage!.Id, orderMessage.NewStatus);
+                        var commandSender = scope.ServiceProvider.GetRequiredService<ISender>();
+
+                        var command = new UpdateOrderItemsCommand(orderMessage!);
+
+                        await commandSender.Send(command);
                     }
                 }
-
-                return Task.CompletedTask;
             };
 
             await _channel.BasicConsumeAsync(queue: queueName, autoAck: true, consumer: consumer);

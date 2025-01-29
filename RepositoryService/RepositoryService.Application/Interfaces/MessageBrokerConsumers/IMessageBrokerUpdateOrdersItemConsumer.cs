@@ -5,7 +5,7 @@ namespace RepositoryService.Application.Interfaces.MessageBrokerConsumers
     /// <summary>
     /// Defines a contract for a consumer that processes messages related to updated orders from a message broker.
     /// </summary>
-    public interface IMessageBrokerOrderUpdatedConsumer
+    public interface IMessageBrokerUpdateOrdersItemConsumer
     {
         /// <summary>
         /// Starts consuming messages related to updated orders.

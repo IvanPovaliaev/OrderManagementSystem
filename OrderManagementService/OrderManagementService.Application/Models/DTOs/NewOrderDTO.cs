@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 
-namespace OrderManagementService.Application.Models
+namespace OrderManagementService.Application.Models.DTOs
 {
-    public record class NewOrderDTO
+    public record NewOrderDTO
     {
         public string ClientFullName { get; init; }
         public string ClientPhone { get; init; }

@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace OrderManagementService.Application.Models
+namespace OrderManagementService.Application.Models.DTOs
 {
-    public record class UpdateOrderDTO
+    public record UpdateOrderItemsDTO
     {
         public Guid Id { get; init; }
         public List<OrderItemDTO> Items { get; init; }
