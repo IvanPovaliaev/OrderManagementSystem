@@ -27,8 +27,8 @@ namespace OrderManagementService.API.Controllers
             return isSuccess ? Ok() : BadRequest();
         }
 
-        [HttpPost("update")]
-        public async Task<IActionResult> Update([FromBody] UpdateOrderItemsDTO order)
+        [HttpPost("updateitems")]
+        public async Task<IActionResult> UpdateItems([FromBody] UpdateOrderItemsDTO order)
         {
             var isSuccess = await _ordersService.UpdateItemsAsync(order);
             return isSuccess ? Ok() : BadRequest();

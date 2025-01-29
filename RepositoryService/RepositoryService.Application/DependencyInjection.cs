@@ -1,6 +1,4 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using RepositoryService.Application.Interfaces;
-using RepositoryService.Application.Services;
 
 namespace RepositoryService.Application
 {
@@ -13,7 +11,6 @@ namespace RepositoryService.Application
         /// <returns>Current service collection with new Application services</returns>
         public static IServiceCollection AddApplication(this IServiceCollection services)
         {
-            services.AddTransient<IOrdersService, OrdersService>();
             return services;
         }
     }

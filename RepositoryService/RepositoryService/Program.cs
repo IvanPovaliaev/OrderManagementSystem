@@ -30,6 +30,7 @@ namespace RepositoryService.API
             builder.Services.AddDbContext<DatabaseContext>(options => options.UseNpgsql(connection), ServiceLifetime.Scoped);
 
             builder.Services.AddAutoMapper(typeof(MappingProfile).Assembly);
+
             builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining<GetProductByIdQuery>());
 
             builder.Services.AddApplication();

@@ -2,7 +2,7 @@
 
 namespace OrderManagementService.Application.Models.DTOs
 {
-    public record class ProductDTO
+    public record ProductDTO
     {
         public Guid Id { get; init; }
         public string Article { get; init; }
