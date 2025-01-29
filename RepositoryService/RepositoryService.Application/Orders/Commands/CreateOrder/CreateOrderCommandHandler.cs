@@ -8,6 +8,9 @@ using System.Threading.Tasks;
 
 namespace RepositoryService.Application.Orders.Commands.CreateOrder
 {
+    /// <summary>
+    /// Handles the <see cref="CreateOrderCommand"/> to create a new order.
+    /// </summary>
     public class CreateOrderCommandHandler : IRequestHandler<CreateOrderCommand>
     {
         private readonly IOrdersRepository _ordersRepository;

@@ -11,6 +11,9 @@ using System.Threading.Tasks;
 
 namespace RepositoryService.Infrastructure.RabbitMQ.Consumers
 {
+    /// <summary>
+    /// Represents a consumer for RabbitMQ order updated messages.
+    /// </summary>
     internal class RabbitMQOrderUpdatedConsumer : IMessageBrokerOrderUpdatedConsumer, IDisposable
     {
         private readonly IOptionsMonitor<RabbitMQOptions> _rabbitMQOptionsMonitor;

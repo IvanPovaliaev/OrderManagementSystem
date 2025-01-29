@@ -13,6 +13,9 @@ using System.Threading.Tasks;
 
 namespace RepositoryService.Infrastructure.RabbitMQ.Consumers
 {
+    /// <summary>
+    /// Represents a consumer for RabbitMQ create order messages.
+    /// </summary>
     internal class RabbitMQOrderCreatedConsumer : IMessageBrokerOrderCreatedConsumer, IDisposable
     {
         private readonly IOptionsMonitor<RabbitMQOptions> _rabbitMQOptionsMonitor;

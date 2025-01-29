@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace RepositoryService.Application.Orders.Queries.GetOrderById
 {
+    /// <summary>
+    /// Handles the <see cref="GetOrderByIdQuery"/> to retrieve an order by its unique identifier.
+    /// </summary>
     public class GetOrderByIdQueryHandler : IRequestHandler<GetOrderByIdQuery, OrderDetailsDTO?>
     {
         private readonly IOrdersRepository _ordersRepository;

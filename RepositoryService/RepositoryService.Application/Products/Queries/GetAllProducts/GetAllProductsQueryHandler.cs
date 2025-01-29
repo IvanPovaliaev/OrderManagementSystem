@@ -9,6 +9,9 @@ using System.Threading.Tasks;
 
 namespace RepositoryService.Application.Products.Queries.GetAllProducts
 {
+    /// <summary>
+    /// Handles the <see cref="GetAllProductsQuery"/> to retrieve all products from the system.
+    /// </summary>
     public class GetAllProductsQueryHandler : IRequestHandler<GetAllProductsQuery, IEnumerable<ProductDTO>>
     {
         private readonly IProductsRepository _productsRepository;

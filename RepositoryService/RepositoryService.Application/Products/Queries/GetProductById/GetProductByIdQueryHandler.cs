@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace RepositoryService.Application.Products.Queries.GetProductById
 {
+    /// <summary>
+    /// Handles the <see cref="GetProductByIdQuery"/> to retrieve a product by its unique identifier.
+    /// </summary>
     public class GetProductByIdQueryHandler : IRequestHandler<GetProductByIdQuery, ProductDTO?>
     {
         private readonly IProductsRepository _productsRepository;

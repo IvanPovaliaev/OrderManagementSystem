@@ -5,6 +5,9 @@ using System.Threading.Tasks;
 
 namespace RepositoryService.Application.Orders.Commands.ChangeOrderStatus
 {
+    /// <summary>
+    /// Handles the <see cref="ChangeOrderStatusCommand"/> to change the status of an order.
+    /// </summary>
     public class ChangeOrderStatusCommandHandler : IRequestHandler<ChangeOrderStatusCommand>
     {
         private readonly IOrdersRepository _ordersRepository;

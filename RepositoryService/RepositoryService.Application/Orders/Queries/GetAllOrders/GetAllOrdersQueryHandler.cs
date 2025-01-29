@@ -9,6 +9,9 @@ using System.Threading.Tasks;
 
 namespace RepositoryService.Application.Orders.Queries.GetAllOrders
 {
+    /// <summary>
+    /// Handles the <see cref="GetAllOrdersQuery"/> to retrieve all orders from the system.
+    /// </summary>
     public class GetAllOrdersQueryHandler : IRequestHandler<GetAllOrdersQuery, IEnumerable<OrderDTO>>
     {
         private readonly IOrdersRepository _ordersRepository;

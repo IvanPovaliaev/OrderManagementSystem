@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace RepositoryService.Application.Orders.Commands.CancelOrder
 {
+    /// <summary>
+    /// Handles the <see cref="CancelOrderCommand"/> to cancel an order.
+    /// </summary>
     public class CancelOrderCommandHandler : IRequestHandler<CancelOrderCommand>
     {
         private readonly IOrdersRepository _ordersRepository;
@@ -17,6 +20,7 @@ namespace RepositoryService.Application.Orders.Commands.CancelOrder
             _ordersRepository = ordersRepository;
             _sender = sender;
         }
+
 
         public async Task Handle(CancelOrderCommand request, CancellationToken cancellationToken)
         {

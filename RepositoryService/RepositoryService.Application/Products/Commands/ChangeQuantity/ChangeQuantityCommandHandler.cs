@@ -5,6 +5,9 @@ using System.Threading;
 
 namespace RepositoryService.Application.Products.Commands.ChangeQuantity
 {
+    /// <summary>
+    /// Handles the <see cref="ChangeQuantityCommand"/> to update the quantity of a product in the system.
+    /// </summary>
     public class ChangeQuantityCommandHandler : IRequestHandler<ChangeQuantityCommand>
     {
         private readonly IProductsRepository _productsRepository;
