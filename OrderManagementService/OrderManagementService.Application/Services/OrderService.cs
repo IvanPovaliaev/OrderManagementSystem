@@ -22,11 +22,13 @@ namespace OrderManagementService.Application.Services
         private readonly IMapper _mapper;
         private readonly IMessageBrokerPublisher _messageBrokerPublisher;
         private readonly OrdersOptions _ordersOptions;
+        private readonly RabbitMQOptions _rabbitOptions;
 
-        public OrderService(IRepositoryServiceClient repositoryServiceClient, IMapper mapper, IOptions<OrdersOptions> ordersOptions, IMessageBrokerPublisher messageBrokerPublisher)
+        public OrderService(IRepositoryServiceClient repositoryServiceClient, IMapper mapper, IOptions<OrdersOptions> ordersOptions, IOptions<RabbitMQOptions> rabbitMQOptions, IMessageBrokerPublisher messageBrokerPublisher)
         {
             _repositoryServiceClient = repositoryServiceClient;
             _mapper = mapper;
+            _rabbitOptions = rabbitMQOptions.Value;
             _ordersOptions = ordersOptions.Value;
             _messageBrokerPublisher = messageBrokerPublisher;
         }
@@ -42,7 +44,7 @@ namespace OrderManagementService.Application.Services
                 }
             }
 
-            var routingKey = "order.create";
+            var routingKey = _rabbitOptions.CreateOrderRoutingKey;
             var message = _mapper.Map<CreateOrderMessage>(newOrder) with
             {
                 StoreUntil = DateTime.UtcNow.AddDays(_ordersOptions.StorageDays),
@@ -100,7 +102,7 @@ namespace OrderManagementService.Application.Services
                                                 .Select(i => i.ProductId)
                                                 .ToList();
 
-            var routingKey = "order.update.items";
+            var routingKey = _rabbitOptions.UpdateOrderItemsRoutingKey;
             var message = new UpdateOrderItemsMessage
             {
                 Id = order.Id,
@@ -126,7 +128,7 @@ namespace OrderManagementService.Application.Services
                 return false;
             }
 
-            var routingKey = "order.change.status";
+            var routingKey = _rabbitOptions.ChangeStatusOrderRoutingKey;
             var message = _mapper.Map<OrderStatusChangedMessage>(order);
             await _messageBrokerPublisher.PublishAsync(routingKey, message);
 
@@ -142,7 +144,7 @@ namespace OrderManagementService.Application.Services
                 return false;
             }
 
-            var routingKey = "order.cancel";
+            var routingKey = _rabbitOptions.CancelOrderRoutingKey;
             await _messageBrokerPublisher.PublishAsync(routingKey, id);
 
             return true;

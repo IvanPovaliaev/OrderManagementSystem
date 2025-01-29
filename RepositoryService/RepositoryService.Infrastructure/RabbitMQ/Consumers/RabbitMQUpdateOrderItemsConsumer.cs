@@ -42,8 +42,10 @@ namespace RepositoryService.Infrastructure.RabbitMQ.Consumers
 
         public async Task ConsumeAsync()
         {
-            var routingKey = "order.update.items";
-            var queueName = "repository.orders.update.items.queue";
+            var options = _rabbitMQOptionsMonitor.CurrentValue;
+            var routingKey = options.UpdateOrderItemsRoutingKey;
+            var queueName = options.UpdateOrderItemsQueue;
+
             var exchangeName = await DeclareExchangeAsync();
 
             await _channel.QueueDeclareAsync(queue: queueName, durable: true, exclusive: false, autoDelete: false, arguments: null);

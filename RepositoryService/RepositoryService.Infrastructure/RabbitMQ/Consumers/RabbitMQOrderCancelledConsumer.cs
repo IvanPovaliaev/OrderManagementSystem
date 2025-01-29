@@ -41,8 +41,10 @@ namespace RepositoryService.Infrastructure.RabbitMQ.Consumers
 
         public async Task ConsumeAsync()
         {
-            var routingKey = "order.cancel";
-            var queueName = "repository.orders.cancel.queue";
+            var options = _rabbitMQOptionsMonitor.CurrentValue;
+            var routingKey = options.CancelOrderRoutingKey;
+            var queueName = options.CancelOrderQueue;
+
             var exchangeName = await DeclareExchangeAsync();
 
             await _channel.QueueDeclareAsync(queue: queueName, durable: true, exclusive: false, autoDelete: false, arguments: null);

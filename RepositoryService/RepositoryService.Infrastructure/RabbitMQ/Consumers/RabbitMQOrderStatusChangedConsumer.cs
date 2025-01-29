@@ -42,8 +42,10 @@ namespace RepositoryService.Infrastructure.RabbitMQ.Consumers
 
         public async Task ConsumeAsync()
         {
-            var routingKey = "order.change.status";
-            var queueName = "repository.orders.status.changed.queue";
+            var options = _rabbitMQOptionsMonitor.CurrentValue;
+            var routingKey = options.ChangeStatusOrderRoutingKey;
+            var queueName = options.ChangeStatusOrderQueue;
+
             var exchangeName = await DeclareExchangeAsync();
 
             await _channel.QueueDeclareAsync(queue: queueName, durable: true, exclusive: false, autoDelete: false, arguments: null);

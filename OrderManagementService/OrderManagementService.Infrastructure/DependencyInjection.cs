@@ -1,6 +1,9 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using FluentValidation;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using OrderManagementService.Application.Extensions;
 using OrderManagementService.Application.Interfaces;
+using OrderManagementService.Application.Models.Options;
 using OrderManagementService.Infrastructure.RabbitMQ;
 using OrderManagementService.Infrastructure.RepositoryService;
 using System;
@@ -18,7 +21,14 @@ namespace OrderManagementService.Infrastructure
         /// <returns>Current service collection with new Infrastructure services</returns>
         public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
         {
+            services.AddValidatorsFromAssemblyContaining<RabbitMQOptionsValidator>();
+
             var repositoryServiceConfiguration = configuration.GetSection("Microservices:RepositoryService");
+
+            services.AddOptions<RepositoryServiceOptions>()
+                    .Bind(repositoryServiceConfiguration)
+                    .ValidateFluentValidation()
+                    .ValidateOnStart();
 
             services.AddHttpClient<IRepositoryServiceClient, RepositoryServiceClient>(client =>
             {
@@ -31,7 +41,9 @@ namespace OrderManagementService.Infrastructure
             var rabbitMQConfiguration = configuration.GetSection("RabbitMQ");
 
             services.AddOptions<RabbitMQOptions>()
-                    .Bind(rabbitMQConfiguration);
+                    .Bind(rabbitMQConfiguration)
+                    .ValidateFluentValidation()
+                    .ValidateOnStart();
 
             services.AddTransient<IMessageBrokerPublisher, RabbitMQPublisher>();
 

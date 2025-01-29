@@ -1,5 +1,7 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using FluentValidation;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using RepositoryService.Application.Extensions;
 using RepositoryService.Application.Interfaces.MessageBrokerConsumers;
 using RepositoryService.Domain.Interfaces;
 using RepositoryService.Infrastructure.Host.Services;
@@ -19,10 +21,14 @@ namespace RepositoryService.Infrastructure
         /// <returns>Current service collection with new Infrastructure services</returns>
         public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
         {
+            services.AddValidatorsFromAssemblyContaining<RabbitMQOptionsValidator>();
+
             var rabbitMQConfiguration = configuration.GetSection("RabbitMQ");
 
             services.AddOptions<RabbitMQOptions>()
-                    .Bind(rabbitMQConfiguration);
+                    .Bind(rabbitMQConfiguration)
+                    .ValidateFluentValidation()
+                    .ValidateOnStart();
 
             services.AddScoped<IProductsRepository, ProductsRepository>();
             services.AddScoped<IOrdersRepository, OrdersRepository>();

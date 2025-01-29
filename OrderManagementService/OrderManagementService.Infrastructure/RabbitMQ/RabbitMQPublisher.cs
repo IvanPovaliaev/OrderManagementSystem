@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using OrderManagementService.Application.Interfaces;
+using OrderManagementService.Application.Models.Options;
 using RabbitMQ.Client;
 using System;
 using System.Text;
