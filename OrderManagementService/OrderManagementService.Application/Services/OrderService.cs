@@ -18,13 +18,13 @@ namespace OrderManagementService.Application.Services
     /// </summary>
     internal class OrderService : IOrdersService
     {
-        private readonly IRepositoryServiceClient _repositoryServiceClient;
+        private readonly IInventoryServiceClient _repositoryServiceClient;
         private readonly IMapper _mapper;
         private readonly IMessageBrokerPublisher _messageBrokerPublisher;
         private readonly OrdersOptions _ordersOptions;
         private readonly RabbitMQOptions _rabbitOptions;
 
-        public OrderService(IRepositoryServiceClient repositoryServiceClient, IMapper mapper, IOptions<OrdersOptions> ordersOptions, IOptions<RabbitMQOptions> rabbitMQOptions, IMessageBrokerPublisher messageBrokerPublisher)
+        public OrderService(IInventoryServiceClient repositoryServiceClient, IMapper mapper, IOptions<OrdersOptions> ordersOptions, IOptions<RabbitMQOptions> rabbitMQOptions, IMessageBrokerPublisher messageBrokerPublisher)
         {
             _repositoryServiceClient = repositoryServiceClient;
             _mapper = mapper;

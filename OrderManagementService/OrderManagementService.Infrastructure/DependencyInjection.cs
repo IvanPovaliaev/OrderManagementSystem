@@ -4,8 +4,8 @@ using Microsoft.Extensions.DependencyInjection;
 using OrderManagementService.Application.Extensions;
 using OrderManagementService.Application.Interfaces;
 using OrderManagementService.Application.Models.Options;
+using OrderManagementService.Infrastructure.InventoryService;
 using OrderManagementService.Infrastructure.RabbitMQ;
-using OrderManagementService.Infrastructure.RepositoryService;
 using System;
 using System.Net.Http.Headers;
 
@@ -23,16 +23,16 @@ namespace OrderManagementService.Infrastructure
         {
             services.AddValidatorsFromAssemblyContaining<RabbitMQOptionsValidator>();
 
-            var repositoryServiceConfiguration = configuration.GetSection("Microservices:RepositoryService");
+            var inventoryServiceConfiguration = configuration.GetSection("Microservices:InventoryService");
 
-            services.AddOptions<RepositoryServiceOptions>()
-                    .Bind(repositoryServiceConfiguration)
+            services.AddOptions<InventoryServiceOptions>()
+                    .Bind(inventoryServiceConfiguration)
                     .ValidateFluentValidation()
                     .ValidateOnStart();
 
-            services.AddHttpClient<IRepositoryServiceClient, RepositoryServiceClient>(client =>
+            services.AddHttpClient<IInventoryServiceClient, InventoryServiceClient>(client =>
             {
-                var options = repositoryServiceConfiguration.Get<RepositoryServiceOptions>();
+                var options = inventoryServiceConfiguration.Get<InventoryServiceOptions>();
                 client.BaseAddress = new Uri(options!.Url);
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
                 client.Timeout = TimeSpan.FromMilliseconds(options.Timeout);

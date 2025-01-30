@@ -1,0 +1,51 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>OrderManagementService.API</name>
+    </assembly>
+    <members>
+        <member name="T:OrderManagementService.API.Controllers.OrderController">
+            <summary>
+            Controller for managing orders
+            </summary>
+        </member>
+        <member name="M:OrderManagementService.API.Controllers.OrderController.Create(OrderManagementService.Application.Models.DTOs.NewOrderDTO)">
+            <summary>
+            Creates a new order
+            </summary>
+            <param name="order">The order data transfer object.</param>
+            <returns>An HTTP response indicating success or failure.</returns>
+            <response code="200">If the order was successfully created</response>
+            <response code="400">If the request data is invalid.</response>
+        </member>
+        <member name="M:OrderManagementService.API.Controllers.OrderController.UpdateItems(OrderManagementService.Application.Models.DTOs.UpdateOrderItemsDTO)">
+            <summary>
+            Updates the items in an existing order.
+            </summary>
+            <param name="order">The order data transfer object with updated items</param>
+            <returns>An HTTP response indicating success or failure.</returns>
+            <response code="200">If the order items were successfully updated</response>
+            <response code="400">If the request data is invalid</response>
+        </member>
+        <member name="M:OrderManagementService.API.Controllers.OrderController.ChangeStatus(OrderManagementService.Application.Models.DTOs.ChangeOrderStatusDTO)">
+            <summary>
+            Changes the status of an existing order.
+            </summary>
+            <param name="order">The order data transfer object with the new status</param>
+            <returns>An HTTP response indicating success or failure</returns>
+            <response code="200">If the order status was successfully changed</response>
+            <response code="404">If the order does not exist</response>
+            <response code="400">If the request data is invalid</response>
+        </member>
+        <member name="M:OrderManagementService.API.Controllers.OrderController.Cancel(System.Guid)">
+            <summary>
+            Cancels an existing order by its unique identifier.
+            </summary>
+            <param name="id">The unique identifier of the order to cancel.</param>
+            <returns>An HTTP response indicating success or failure</returns>
+            <response code="200">If the order was successfully canceled</response>
+            <response code="404">If the order does not exist</response>
+            <response code="400">If the request data is invalid</response>
+        </member>
+    </members>
+</doc>
