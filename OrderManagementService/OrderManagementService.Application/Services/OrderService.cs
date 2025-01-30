@@ -18,15 +18,15 @@ namespace OrderManagementService.Application.Services
     /// </summary>
     internal class OrderService : IOrdersService
     {
-        private readonly IInventoryServiceClient _repositoryServiceClient;
+        private readonly IInventoryServiceClient _inventoryServiceClient;
         private readonly IMapper _mapper;
         private readonly IMessageBrokerPublisher _messageBrokerPublisher;
         private readonly OrdersOptions _ordersOptions;
         private readonly RabbitMQOptions _rabbitOptions;
 
-        public OrderService(IInventoryServiceClient repositoryServiceClient, IMapper mapper, IOptions<OrdersOptions> ordersOptions, IOptions<RabbitMQOptions> rabbitMQOptions, IMessageBrokerPublisher messageBrokerPublisher)
+        public OrderService(IInventoryServiceClient inventoryServiceClient, IMapper mapper, IOptions<OrdersOptions> ordersOptions, IOptions<RabbitMQOptions> rabbitMQOptions, IMessageBrokerPublisher messageBrokerPublisher)
         {
-            _repositoryServiceClient = repositoryServiceClient;
+            _inventoryServiceClient = inventoryServiceClient;
             _mapper = mapper;
             _rabbitOptions = rabbitMQOptions.Value;
             _ordersOptions = ordersOptions.Value;
@@ -59,9 +59,9 @@ namespace OrderManagementService.Application.Services
 
         public async Task<bool> UpdateItemsAsync(UpdateOrderItemsDTO order)
         {
-            var orderDb = await _repositoryServiceClient.GetOrderByIdAsync(order.Id);
+            var orderDb = await _inventoryServiceClient.GetOrderByIdAsync(order.Id);
 
-            if (orderDb is null)
+            if (orderDb is null || orderDb.Status != OrderStatus.Created)
             {
                 return false;
             }
@@ -121,7 +121,7 @@ namespace OrderManagementService.Application.Services
 
         public async Task<bool> ChangeStatusAsync(ChangeOrderStatusDTO order)
         {
-            var orderDb = await _repositoryServiceClient.GetOrderByIdAsync(order.Id);
+            var orderDb = await _inventoryServiceClient.GetOrderByIdAsync(order.Id);
 
             if (!IsStatusCanBeChanged(orderDb.Status, order.NewStatus))
             {
@@ -137,7 +137,7 @@ namespace OrderManagementService.Application.Services
 
         public async Task<bool> CancelAsync(Guid id)
         {
-            var order = await _repositoryServiceClient.GetOrderByIdAsync(id);
+            var order = await _inventoryServiceClient.GetOrderByIdAsync(id);
 
             if (!CanBeCanceled(order))
             {
@@ -152,7 +152,7 @@ namespace OrderManagementService.Application.Services
 
         public async Task<bool> IsExistAsync(Guid id)
         {
-            return await _repositoryServiceClient.GetOrderByIdAsync(id) is not null;
+            return await _inventoryServiceClient.GetOrderByIdAsync(id) is not null;
         }
 
         private bool IsStatusCanBeChanged(OrderStatus currentStatus, OrderStatus newStatus)
@@ -164,7 +164,7 @@ namespace OrderManagementService.Application.Services
 
         private async Task<bool> IsItemCorrectAsync(OrderItemDTO item, int quantityChange)
         {
-            var productDb = await _repositoryServiceClient.GetProductByIdAsync(item.ProductId);
+            var productDb = await _inventoryServiceClient.GetProductByIdAsync(item.ProductId);
 
             if (productDb == null || quantityChange > productDb.QuantityInStock)
             {
