@@ -11,6 +11,7 @@ using Serilog;
 using SharpGrip.FluentValidation.AutoValidation.Mvc.Extensions;
 using System;
 using System.IO;
+using System.Text.Json.Serialization;
 
 namespace OrderManagementService.API
 {
@@ -36,7 +37,11 @@ namespace OrderManagementService.API
                             .ValidateFluentValidation()
                             .ValidateOnStart();
 
-            builder.Services.AddControllers();
+            builder.Services.AddControllers()
+                            .AddJsonOptions(options =>
+                            {
+                                options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+                            });
 
             builder.Services.AddApplication();
             builder.Services.AddInfrastructure(builder.Configuration);
