@@ -23,6 +23,10 @@ namespace RepositoryService.Domain.Interfaces
         /// <returns>The product with the specified ID; null if not found.</returns>
         Task<Product?> GetAsync(Guid id);
 
+        /// <summary>
+        /// Updates an existing product.
+        /// </summary>
+        /// <param name="product">The product to update.</param>
         Task UpdateAsync(Product product);
     }
 }

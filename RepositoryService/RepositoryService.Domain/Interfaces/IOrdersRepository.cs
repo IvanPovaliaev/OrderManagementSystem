@@ -10,6 +10,10 @@ namespace RepositoryService.Domain.Interfaces
     /// </summary>
     public interface IOrdersRepository
     {
+        /// <summary>
+        /// Adds a new order
+        /// </summary>
+        /// <param name="order">The order to add.</param>
         Task AddAsync(Order order);
 
         /// <summary>
@@ -25,6 +29,10 @@ namespace RepositoryService.Domain.Interfaces
         /// <returns>The order with the specified ID; null if not found.</returns>
         Task<Order?> GetAsync(Guid id);
 
+        /// <summary>
+        /// Updates an existing order.
+        /// </summary>
+        /// <param name="order">The order to update.</param>
         Task UpdateAsync(Order order);
     }
 }
