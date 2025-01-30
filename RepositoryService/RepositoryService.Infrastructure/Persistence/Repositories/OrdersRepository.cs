@@ -39,7 +39,6 @@ namespace RepositoryService.Infrastructure.Persistence.Repositories
         public async Task UpdateAsync(Order order)
         {
             _databaseContext.Orders.Update(order);
-            await _databaseContext.SaveChangesAsync();
         }
     }
 }

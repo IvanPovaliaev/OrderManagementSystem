@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using MediatR;
+using Microsoft.Extensions.DependencyInjection;
+using RepositoryService.Application.Behaviors;
 
 namespace RepositoryService.Application
 {
@@ -11,6 +13,7 @@ namespace RepositoryService.Application
         /// <returns>Current service collection with new Application services</returns>
         public static IServiceCollection AddApplication(this IServiceCollection services)
         {
+            services.AddScoped(typeof(IPipelineBehavior<,>), typeof(UnitOfWorkBehavior<,>));
             return services;
         }
     }

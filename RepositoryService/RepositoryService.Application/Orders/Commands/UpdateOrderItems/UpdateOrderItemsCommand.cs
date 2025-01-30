@@ -1,4 +1,4 @@
-﻿using MediatR;
+﻿using RepositoryService.Application.Interfaces;
 using RepositoryService.Application.Models.Messages;
 
 namespace RepositoryService.Application.Orders.Commands.UpdateOrderItems
@@ -7,5 +7,5 @@ namespace RepositoryService.Application.Orders.Commands.UpdateOrderItems
     /// Represents a command to cancel an order.
     /// </summary>
     /// <param name="Message">The message containing order details for update items.</param>
-    public record UpdateOrderItemsCommand(UpdateOrderItemsMessage Message) : IRequest;
+    public record UpdateOrderItemsCommand(UpdateOrderItemsMessage Message) : ICommandRequest;
 }

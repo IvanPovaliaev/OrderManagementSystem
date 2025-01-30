@@ -6,6 +6,7 @@ using RepositoryService.Application.Interfaces.MessageBrokerConsumers;
 using RepositoryService.Domain.Interfaces;
 using RepositoryService.Infrastructure.Host.Services;
 using RepositoryService.Infrastructure.Persistence.Repositories;
+using RepositoryService.Infrastructure.Persistence.UnitOfWork;
 using RepositoryService.Infrastructure.RabbitMQ;
 using RepositoryService.Infrastructure.RabbitMQ.Consumers;
 
@@ -32,6 +33,7 @@ namespace RepositoryService.Infrastructure
 
             services.AddScoped<IProductsRepository, ProductsRepository>();
             services.AddScoped<IOrdersRepository, OrdersRepository>();
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
 
             services.AddTransient<IMessageBrokerOrderCancelledConsumer, RabbitMQOrderCancelledConsumer>();
             services.AddHostedService<MessageBrokerOrderCancelledHostedService>();
