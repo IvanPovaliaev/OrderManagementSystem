@@ -23,7 +23,7 @@ namespace OrderManagementService.API
             builder.Host.UseSerilog((context, configuration) => configuration
                         .ReadFrom.Configuration(context.Configuration)
                         .Enrich.FromLogContext()
-                        .Enrich.WithProperty("ApplicationName", "OrderManagementService"));
+                        .Enrich.WithProperty("ApplicationName", "OrderManagementService.API"));
 
             builder.Services.AddAutoMapper(typeof(MappingProfile).Assembly);
 
@@ -53,7 +53,7 @@ namespace OrderManagementService.API
                 options.SwaggerDoc("v1", new OpenApiInfo
                 {
                     Version = "v1",
-                    Title = "OrderManagementService",
+                    Title = "OrderManagementService.API",
                     Description = "Сервис, который предоставляет REST API для управления заказами."
                 });
             });
