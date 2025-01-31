@@ -14,20 +14,20 @@ namespace InventoryService.Application.Orders.Commands.UpdateOrderItems
     /// </summary>
     public class UpdateOrderItemsCommandHandler : IRequestHandler<UpdateOrderItemsCommand>
     {
-        private readonly IOrdersRepository _ordersRepository;
+        private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
         private readonly ISender _sender;
 
-        public UpdateOrderItemsCommandHandler(IOrdersRepository ordersRepository, IMapper mapper, ISender sender)
+        public UpdateOrderItemsCommandHandler(IUnitOfWork unitOfWork, IMapper mapper, ISender sender)
         {
-            _ordersRepository = ordersRepository;
+            _unitOfWork = unitOfWork;
             _mapper = mapper;
             _sender = sender;
         }
 
         public async Task Handle(UpdateOrderItemsCommand request, CancellationToken cancellationToken)
         {
-            var dbOrder = await _ordersRepository.GetAsync(request.Message.Id);
+            var dbOrder = await _unitOfWork.OrdersRepository.GetAsync(request.Message.Id);
 
             var addedItems = request.Message.AddedItems
                                             .Select(_mapper.Map<OrderItem>);
@@ -41,7 +41,7 @@ namespace InventoryService.Application.Orders.Commands.UpdateOrderItems
             dbOrder.TotalItems = request.Message.TotalItems;
             dbOrder.TotalPrice = request.Message.TotalPrice;
 
-            await _ordersRepository.UpdateAsync(dbOrder);
+            await _unitOfWork.OrdersRepository.UpdateAsync(dbOrder);
 
             async Task RemoveItems()
             {

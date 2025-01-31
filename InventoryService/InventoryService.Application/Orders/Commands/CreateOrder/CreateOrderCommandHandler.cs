@@ -13,13 +13,13 @@ namespace InventoryService.Application.Orders.Commands.CreateOrder
     /// </summary>
     public class CreateOrderCommandHandler : IRequestHandler<CreateOrderCommand>
     {
-        private readonly IOrdersRepository _ordersRepository;
+        private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
         private readonly ISender _sender;
 
-        public CreateOrderCommandHandler(IOrdersRepository ordersRepository, IMapper mapper, ISender sender)
+        public CreateOrderCommandHandler(IUnitOfWork unitOfWork, IMapper mapper, ISender sender)
         {
-            _ordersRepository = ordersRepository;
+            _unitOfWork = unitOfWork;
             _mapper = mapper;
             _sender = sender;
         }
@@ -34,7 +34,7 @@ namespace InventoryService.Application.Orders.Commands.CreateOrder
                 await _sender.Send(command);
             }
 
-            await _ordersRepository.AddAsync(newOrder);
+            await _unitOfWork.OrdersRepository.AddAsync(newOrder);
         }
     }
 }

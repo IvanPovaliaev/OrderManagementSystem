@@ -12,18 +12,18 @@ namespace InventoryService.Application.Orders.Commands.CancelOrder
     /// </summary>
     public class CancelOrderCommandHandler : IRequestHandler<CancelOrderCommand>
     {
-        private readonly IOrdersRepository _ordersRepository;
+        private readonly IUnitOfWork _unitOfWork;
         private readonly ISender _sender;
 
-        public CancelOrderCommandHandler(IOrdersRepository ordersRepository, ISender sender)
+        public CancelOrderCommandHandler(IUnitOfWork unitOfWork, ISender sender)
         {
-            _ordersRepository = ordersRepository;
+            _unitOfWork = unitOfWork;
             _sender = sender;
         }
 
         public async Task Handle(CancelOrderCommand request, CancellationToken cancellationToken)
         {
-            var dbOrder = await _ordersRepository.GetAsync(request.Id);
+            var dbOrder = await _unitOfWork.OrdersRepository.GetAsync(request.Id);
 
             if (dbOrder is null)
             {
@@ -38,7 +38,7 @@ namespace InventoryService.Application.Orders.Commands.CancelOrder
                 await _sender.Send(command);
             }
 
-            await _ordersRepository.UpdateAsync(dbOrder);
+            await _unitOfWork.OrdersRepository.UpdateAsync(dbOrder);
         }
     }
 }

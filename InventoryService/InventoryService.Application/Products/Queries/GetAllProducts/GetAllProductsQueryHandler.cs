@@ -14,18 +14,18 @@ namespace InventoryService.Application.Products.Queries.GetAllProducts
     /// </summary>
     public class GetAllProductsQueryHandler : IRequestHandler<GetAllProductsQuery, IEnumerable<ProductDTO>>
     {
-        private readonly IProductsRepository _productsRepository;
+        private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
 
-        public GetAllProductsQueryHandler(IProductsRepository productsRepository, IMapper mapper)
+        public GetAllProductsQueryHandler(IUnitOfWork unitOfWork, IMapper mapper)
         {
-            _productsRepository = productsRepository;
+            _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
 
         public async Task<IEnumerable<ProductDTO>> Handle(GetAllProductsQuery request, CancellationToken cancellationToken)
         {
-            var dbProducts = await _productsRepository.GetAllAsync();
+            var dbProducts = await _unitOfWork.ProductsRepository.GetAllAsync();
             return dbProducts.Select(_mapper.Map<ProductDTO>);
         }
     }

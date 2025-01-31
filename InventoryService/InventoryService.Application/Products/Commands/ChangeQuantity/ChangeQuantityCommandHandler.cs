@@ -1,7 +1,7 @@
-﻿using MediatR;
-using System.Threading.Tasks;
+﻿using InventoryService.Domain.Interfaces;
+using MediatR;
 using System.Threading;
-using InventoryService.Domain.Interfaces;
+using System.Threading.Tasks;
 
 namespace InventoryService.Application.Products.Commands.ChangeQuantity
 {
@@ -10,16 +10,16 @@ namespace InventoryService.Application.Products.Commands.ChangeQuantity
     /// </summary>
     public class ChangeQuantityCommandHandler : IRequestHandler<ChangeQuantityCommand>
     {
-        private readonly IProductsRepository _productsRepository;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public ChangeQuantityCommandHandler(IProductsRepository productsRepository)
+        public ChangeQuantityCommandHandler(IUnitOfWork unitOfWork)
         {
-            _productsRepository = productsRepository;
+            _unitOfWork = unitOfWork;
         }
 
         public async Task Handle(ChangeQuantityCommand request, CancellationToken cancellationToken)
         {
-            var dbProduct = await _productsRepository.GetAsync(request.Id);
+            var dbProduct = await _unitOfWork.ProductsRepository.GetAsync(request.Id);
             dbProduct!.QuantityInStock += request.QuantityChange;
         }
     }

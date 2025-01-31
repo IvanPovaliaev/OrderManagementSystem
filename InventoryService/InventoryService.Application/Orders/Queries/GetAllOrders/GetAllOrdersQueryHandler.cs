@@ -14,18 +14,18 @@ namespace InventoryService.Application.Orders.Queries.GetAllOrders
     /// </summary>
     public class GetAllOrdersQueryHandler : IRequestHandler<GetAllOrdersQuery, IEnumerable<OrderDTO>>
     {
-        private readonly IOrdersRepository _ordersRepository;
+        private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
 
-        public GetAllOrdersQueryHandler(IOrdersRepository ordersRepository, IMapper mapper)
+        public GetAllOrdersQueryHandler(IUnitOfWork unitOfWork, IMapper mapper)
         {
-            _ordersRepository = ordersRepository;
+            _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
 
         public async Task<IEnumerable<OrderDTO>> Handle(GetAllOrdersQuery request, CancellationToken cancellationToken)
         {
-            var dbOrders = await _ordersRepository.GetAllAsync();
+            var dbOrders = await _unitOfWork.OrdersRepository.GetAllAsync();
             return dbOrders.Select(_mapper.Map<OrderDTO>);
         }
     }

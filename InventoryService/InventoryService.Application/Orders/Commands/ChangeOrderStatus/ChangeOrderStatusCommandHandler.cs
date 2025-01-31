@@ -10,16 +10,16 @@ namespace InventoryService.Application.Orders.Commands.ChangeOrderStatus
     /// </summary>
     public class ChangeOrderStatusCommandHandler : IRequestHandler<ChangeOrderStatusCommand>
     {
-        private readonly IOrdersRepository _ordersRepository;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public ChangeOrderStatusCommandHandler(IOrdersRepository ordersRepository)
+        public ChangeOrderStatusCommandHandler(IUnitOfWork unitOfWork)
         {
-            _ordersRepository = ordersRepository;
+            _unitOfWork = unitOfWork;
         }
 
         public async Task Handle(ChangeOrderStatusCommand request, CancellationToken cancellationToken)
         {
-            var dbOrder = await _ordersRepository.GetAsync(request.Id);
+            var dbOrder = await _unitOfWork.OrdersRepository.GetAsync(request.Id);
 
             if (dbOrder is null)
             {
@@ -27,7 +27,7 @@ namespace InventoryService.Application.Orders.Commands.ChangeOrderStatus
             }
 
             dbOrder.Status = request.NewStatus;
-            await _ordersRepository.UpdateAsync(dbOrder);
+            await _unitOfWork.OrdersRepository.UpdateAsync(dbOrder);
         }
     }
 }

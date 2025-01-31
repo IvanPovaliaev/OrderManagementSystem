@@ -12,17 +12,17 @@ namespace InventoryService.Application.Products.Queries.GetProductById
     /// </summary>
     public class GetProductByIdQueryHandler : IRequestHandler<GetProductByIdQuery, ProductDTO?>
     {
-        private readonly IProductsRepository _productsRepository;
+        private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
 
-        public GetProductByIdQueryHandler(IProductsRepository productsRepository, IMapper mapper)
+        public GetProductByIdQueryHandler(IUnitOfWork unitOfWork, IMapper mapper)
         {
-            _productsRepository = productsRepository;
+            _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
         public async Task<ProductDTO?> Handle(GetProductByIdQuery request, CancellationToken cancellationToken)
         {
-            var dbProduct = await _productsRepository.GetAsync(request.Id);
+            var dbProduct = await _unitOfWork.ProductsRepository.GetAsync(request.Id);
             return _mapper.Map<ProductDTO>(dbProduct);
         }
     }

@@ -12,18 +12,18 @@ namespace InventoryService.Application.Orders.Queries.GetOrderById
     /// </summary>
     public class GetOrderByIdQueryHandler : IRequestHandler<GetOrderByIdQuery, OrderDetailsDTO?>
     {
-        private readonly IOrdersRepository _ordersRepository;
+        private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
 
-        public GetOrderByIdQueryHandler(IOrdersRepository ordersRepository, IMapper mapper)
+        public GetOrderByIdQueryHandler(IUnitOfWork unitOfWork, IMapper mapper)
         {
-            _ordersRepository = ordersRepository;
+            _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
 
         public async Task<OrderDetailsDTO?> Handle(GetOrderByIdQuery request, CancellationToken cancellationToken)
         {
-            var dbOrder = await _ordersRepository.GetAsync(request.Id);
+            var dbOrder = await _unitOfWork.OrdersRepository.GetAsync(request.Id);
             return _mapper.Map<OrderDetailsDTO>(dbOrder);
         }
     }
